@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
@@ -44,11 +45,15 @@ class Landing extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
-                        child: Text(
-                            'Forgot password',
-                            style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.gray))
+                        child: RichText(
+                          text: TextSpan(
+                              text: 'Forgot password',
+                              style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.dark_gray)),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => print('click'),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
