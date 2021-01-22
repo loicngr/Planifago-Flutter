@@ -6,9 +6,6 @@ import 'package:planifago/src/views/router.dart';
 
 class Landing extends StatelessWidget {
 
-  double logoBlocHeight(BuildContext c) => deviceHeight(c) / 2;
-  double logoBlocBtn(BuildContext c) => logoBlocHeight(c) / 2;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +14,7 @@ class Landing extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: logoBlocHeight(context),
+              height: landingLogoBlocHeight(context),
               width: deviceWidth(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -27,7 +24,7 @@ class Landing extends StatelessWidget {
               ),
             ),
             Container(
-              height: logoBlocBtn(context),
+              height: landingLogoBlocBtn(context),
               width: deviceWidth(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +66,7 @@ class Landing extends StatelessWidget {
               ),
             ),
             Container(
-              height: logoBlocBtn(context),
+              height: landingLogoBlocBtn(context),
               width: deviceWidth(context),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
