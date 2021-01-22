@@ -13,4 +13,6 @@ class ConstantColors {
 class ConstantSize {
   static const landingButtonWidth = 300.00;
   static const landingButtonHeight = 60.00;
+  static const landingLogoHeight = 70.00;
+  static const landingButtonsPaddingHeight = 30.00;
 }

@@ -14,7 +14,7 @@ class DrawCircle extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawCircle(Offset(0.0, 0.0), 100.0, _paint);
+    canvas.drawCircle(Offset(0.0, 0.0), 70.0, _paint);
   }
 
   @override
@@ -22,3 +22,8 @@ class DrawCircle extends CustomPainter {
     return false;
   }
 }
+
+bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.landscape;
+EdgeInsets devicePadding(BuildContext c) => MediaQuery.of(c).padding;
+double deviceWidth(BuildContext c) => MediaQuery.of(c).size.width - devicePadding(c).left - devicePadding(c).right;
+double deviceHeight(BuildContext c) => MediaQuery.of(c).size.height;
