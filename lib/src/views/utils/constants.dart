@@ -15,4 +15,6 @@ class ConstantSize {
   static const landingButtonHeight = 60.00;
   static const landingLogoHeight = 70.00;
   static const landingButtonsPaddingHeight = 30.00;
+
+  static const landingLoginButtonHeight = 50.00;
 }
