@@ -6,38 +6,32 @@ import 'package:planifago/src/views/router.dart';
 
 class Landing extends StatelessWidget {
 
-  /// Retourne la taille de l'espacement pour le logo
-  /// en fonction de la hauteur des boutons et de la hauteur de l'écran
-  double getLogoPadding(BuildContext c) {
-    var btnHeight = (ConstantSize.landingButtonHeight * 2) - ConstantSize.landingButtonsPaddingHeight;
-    var h = ((deviceHeight(c) / 2) - btnHeight);
-    print(h);
-    return h;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          height: deviceHeight(context),
-          width: deviceWidth(context),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: landingLogoBlocHeight(context),
+              width: deviceWidth(context),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: getLogoPadding(context)),
-                    child: CustomPaint(painter: DrawCircle()),
-                  ),
+                  CustomPaint(painter: DrawCircle())
                 ],
               ),
-              Row(
+            ),
+            Container(
+              height: landingLogoBlocBtn(context),
+              width: deviceWidth(context),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Material(
                         elevation: 0.0,
@@ -70,8 +64,12 @@ class Landing extends StatelessWidget {
                   )
                 ],
               ),
-              Padding(padding: const EdgeInsets.only(bottom: 30.0)),
-              Row(
+            ),
+            Container(
+              height: landingLogoBlocBtn(context),
+              width: deviceWidth(context),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Material(
@@ -98,9 +96,8 @@ class Landing extends StatelessWidget {
                   ),
                 ],
               ),
-              Padding(padding: const EdgeInsets.only(bottom: 50.0)),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
