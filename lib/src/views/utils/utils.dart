@@ -27,3 +27,6 @@ bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.
 EdgeInsets devicePadding(BuildContext c) => MediaQuery.of(c).padding;
 double deviceWidth(BuildContext c) => MediaQuery.of(c).size.width - devicePadding(c).left - devicePadding(c).right;
 double deviceHeight(BuildContext c) => MediaQuery.of(c).size.height;
+
+double landingLogoBlocHeight(BuildContext c) => deviceHeight(c) / 2;
+double landingLogoBlocBtn(BuildContext c) => landingLogoBlocHeight(c) / 2;
