@@ -23,6 +23,43 @@ class DrawCircle extends CustomPainter {
   }
 }
 
+InputDecoration buildInputDecoration(String hint, String iconPath) {
+  return InputDecoration(
+    focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color: Color(ConstantColors.blue)
+        )
+    ),
+    hintText: hint,
+    enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color: Color(ConstantColors.gray)
+        )
+    ),
+    icon: iconPath != '' ? Image.asset(iconPath) : null,
+    errorStyle: TextStyle(color: Color(ConstantColors.saumon)),
+    errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color:  Color(ConstantColors.saumon)
+        )
+    ),
+    focusedErrorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color:  Color(ConstantColors.saumon)
+        )
+    ),
+  );
+}
+
+bool isEmail(String value) {
+  String regex =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+  RegExp regExp = new RegExp(regex);
+
+  return value.isNotEmpty && regExp.hasMatch(value);
+}
+
 bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.landscape;
 EdgeInsets devicePadding(BuildContext c) => MediaQuery.of(c).padding;
 double deviceWidth(BuildContext c) => MediaQuery.of(c).size.width - devicePadding(c).left - devicePadding(c).right;
