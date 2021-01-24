@@ -45,6 +45,7 @@ class Login extends StatelessWidget {
                               child: Column(
                                 children: [
                                   TextFormField(
+                                    keyboardType: TextInputType.emailAddress,
                                     decoration: const InputDecoration(
                                       hintText: 'Email',
                                     ),
@@ -52,10 +53,17 @@ class Login extends StatelessWidget {
                                       if (value.isEmpty) {
                                         return 'Please enter your email address';
                                       }
+                                      else if (!isEmail(value)) {
+                                        return 'Please enter a valid email address';
+                                      }
                                       return null;
                                     },
                                   ),
                                   TextFormField(
+                                    obscureText: true,
+                                    autocorrect: false,
+                                    enableSuggestions: false,
+                                    keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       hintText: 'Password',
                                     ),
