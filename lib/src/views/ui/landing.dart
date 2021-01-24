@@ -87,7 +87,9 @@ class Landing extends StatelessWidget {
                                 width: 1.00
                             )
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(landingSignUpRoute());
+                        },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Color(ConstantColors.blue), fontWeight: FontWeight.bold, fontSize: 20.00)),
