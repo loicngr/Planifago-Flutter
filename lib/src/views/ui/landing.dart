@@ -56,7 +56,7 @@ class Landing extends StatelessWidget {
                             text: 'Forgot password',
                             style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.dark_gray)),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.of(context).push(landingSignInRoute()),
+                              ..onTap = () => Navigator.of(context).push(landingForgotPasswordRoute()),
                           ),
                         ),
                       ),
