@@ -64,7 +64,7 @@ class Login extends StatelessWidget {
                     style: TextStyle(fontSize: 13.00, color: Color(ConstantColors.blue), fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => {
-                        Navigator.of(context).push(landingRoute())
+                        Navigator.pop(context)
                       },
                   ),
                 ),
