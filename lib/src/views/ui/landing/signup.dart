@@ -2,9 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
 
@@ -19,11 +23,11 @@ class SignUp extends StatelessWidget {
   }
   Widget _buildLastName() {
     return TextFormField(
-          validator: (value) =>
-          value.isEmpty ? "Last name cannot be empty" : null,
-          style: TextStyle(color: Color(ConstantColors.black)),
-          decoration: buildInputDecoration("Last name", 'assets/images/user.png'),
-      );
+      validator: (value) =>
+      value.isEmpty ? "Last name cannot be empty" : null,
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration: buildInputDecoration("Last name", 'assets/images/user.png'),
+    );
   }
   Widget _buildEmail() {
     return TextFormField(
@@ -48,17 +52,17 @@ class SignUp extends StatelessWidget {
   }
   Widget _buildConfirmPassword() {
     return TextFormField(
-          obscureText: true,
-          autocorrect: false,
-          enableSuggestions: false,
-          keyboardType: TextInputType.text,
-          validator: (value) => value.isEmpty ||
-              (value.isNotEmpty && value != _passwordController.text)
-              ? "Must match the previous entry"
-              : null,
-          style: TextStyle(color: Color(ConstantColors.black)),
-          decoration: buildInputDecoration("Confirm password", 'assets/images/password.png'),
-        );
+      obscureText: true,
+      autocorrect: false,
+      enableSuggestions: false,
+      keyboardType: TextInputType.text,
+      validator: (value) => value.isEmpty ||
+          (value.isNotEmpty && value != _passwordController.text)
+          ? "Must match the previous entry"
+          : null,
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration: buildInputDecoration("Confirm password", 'assets/images/password.png'),
+    );
   }
   Widget _buildSignUpButton(BuildContext context) {
     return Container(

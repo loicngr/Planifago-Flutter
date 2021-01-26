@@ -67,3 +67,14 @@ double deviceHeight(BuildContext c) => MediaQuery.of(c).size.height;
 
 double landingLogoBlocHeight(BuildContext c) => deviceHeight(c) / 2;
 double landingLogoBlocBtn(BuildContext c) => landingLogoBlocHeight(c) / 2;
+
+
+getLoader() {
+  return Center(
+    child: Container(
+      width: 50,
+      height: 50,
+      child: CircularProgressIndicator(),
+    ),
+  );
+}

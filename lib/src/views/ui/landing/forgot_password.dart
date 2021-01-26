@@ -2,11 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
 
-class Login extends StatelessWidget {
+class ForgotPassword extends StatefulWidget {
+  @override
+  _ForgotPasswordState createState() => _ForgotPasswordState();
+}
+
+class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController();
 
   Widget _buildEmail() {
     return TextFormField(
@@ -16,21 +19,7 @@ class Login extends StatelessWidget {
       decoration: buildInputDecoration("Email", 'assets/images/email.png'),
     );
   }
-  Widget _buildPassword() {
-    return TextFormField(
-      obscureText: true,
-      autocorrect: false,
-      enableSuggestions: false,
-      keyboardType: TextInputType.text,
-      controller: _passwordController,
-      validator: (value) =>
-      value.length <= 6 ? "Password must be 6 or more characters in length" : null,
-      style: TextStyle(color: Color(ConstantColors.black)),
-      decoration:
-      buildInputDecoration("Password", 'assets/images/password.png'),
-    );
-  }
-  Widget _buildSignUpButton(BuildContext context) {
+  Widget _buildSendButton(BuildContext context) {
     return Container(
       height: (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
       width: deviceWidth(context),
@@ -51,7 +40,7 @@ class Login extends StatelessWidget {
                   onPressed: () {
                     _validateAndSubmit();
                   },
-                  child: Text("Log In",
+                  child: Text("Reset my password",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Color(ConstantColors.white), fontWeight: FontWeight.bold, fontSize: 20.00)),
                 ),
@@ -121,7 +110,6 @@ class Login extends StatelessWidget {
                               child: Column(
                                 children: [
                                   _buildEmail(),
-                                  _buildPassword()
                                 ],
                               ),
                             ),
@@ -131,7 +119,7 @@ class Login extends StatelessWidget {
                     ],
                   ),
                 ),
-                _buildSignUpButton(context)
+                _buildSendButton(context)
               ],
             ),
           ),

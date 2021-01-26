@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:planifago/src/views/ui/forgot_password.dart';
-import 'package:planifago/src/views/ui/landing.dart';
-import 'package:planifago/src/views/ui/login.dart';
-import 'package:planifago/src/views/ui/signup.dart';
-
+import 'package:planifago/src/views/ui/landing/forgot_password.dart';
+import 'package:planifago/src/views/ui/landing/landing.dart';
+import 'package:planifago/src/views/ui/landing/login.dart';
+import 'package:planifago/src/views/ui/landing/signup.dart';
 
 Route landingRoute() {
   return PageRouteBuilder(

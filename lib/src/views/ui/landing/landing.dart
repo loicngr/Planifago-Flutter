@@ -1,10 +1,38 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:planifago/src/api/auth.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
 import 'package:planifago/src/views/router.dart';
 
-class Landing extends StatelessWidget {
+class Landing extends StatefulWidget {
+  @override
+  _LandingState createState() => _LandingState();
+}
+
+class _LandingState extends State<Landing> {
+  final String _queryUsers = """
+{
+    users {
+    	edges {
+        node {
+          id,
+    			plan { id },
+          email,
+          roles,
+          firstname,
+          lastname,
+          phone,
+          isActive,
+          avatar,
+          createdAt,
+          updatedAt
+        }
+      }
+  	}
+}
+  """;
 
   @override
   Widget build(BuildContext context) {

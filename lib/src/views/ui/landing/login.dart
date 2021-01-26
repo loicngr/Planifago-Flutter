@@ -2,10 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
 
-class ForgotPassword extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
 
   Widget _buildEmail() {
     return TextFormField(
@@ -15,7 +20,21 @@ class ForgotPassword extends StatelessWidget {
       decoration: buildInputDecoration("Email", 'assets/images/email.png'),
     );
   }
-  Widget _buildSendButton(BuildContext context) {
+  Widget _buildPassword() {
+    return TextFormField(
+      obscureText: true,
+      autocorrect: false,
+      enableSuggestions: false,
+      keyboardType: TextInputType.text,
+      controller: _passwordController,
+      validator: (value) =>
+      value.length <= 6 ? "Password must be 6 or more characters in length" : null,
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration:
+      buildInputDecoration("Password", 'assets/images/password.png'),
+    );
+  }
+  Widget _buildSignUpButton(BuildContext context) {
     return Container(
       height: (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
       width: deviceWidth(context),
@@ -36,7 +55,7 @@ class ForgotPassword extends StatelessWidget {
                   onPressed: () {
                     _validateAndSubmit();
                   },
-                  child: Text("Reset my password",
+                  child: Text("Log In",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Color(ConstantColors.white), fontWeight: FontWeight.bold, fontSize: 20.00)),
                 ),
@@ -106,6 +125,7 @@ class ForgotPassword extends StatelessWidget {
                               child: Column(
                                 children: [
                                   _buildEmail(),
+                                  _buildPassword()
                                 ],
                               ),
                             ),
@@ -115,7 +135,7 @@ class ForgotPassword extends StatelessWidget {
                     ],
                   ),
                 ),
-                _buildSendButton(context)
+                _buildSignUpButton(context)
               ],
             ),
           ),
