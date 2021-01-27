@@ -20,7 +20,7 @@ class ConstantSize {
 }
 
 class ConstantApi {
-  static const dev_api_ip = '172.23.66.118';
+  static const dev_api_ip = '172.17.84.81';
   static const dev_api_port = '8000';
   static const dev_api_proto = 'http';
   static const dev_api_address = dev_api_proto + '://' + dev_api_ip + ':' + dev_api_port;

@@ -7,33 +7,15 @@ import 'package:planifago/src/views/utils/constants.dart';
 import 'package:planifago/src/views/router.dart';
 
 class Landing extends StatefulWidget {
+  final ValueNotifier<GraphQLClient> client;
+
+  const Landing({Key key, this.client}) : super(key: key);
+
   @override
   _LandingState createState() => _LandingState();
 }
 
 class _LandingState extends State<Landing> {
-  final String _queryUsers = """
-{
-    users {
-    	edges {
-        node {
-          id,
-    			plan { id },
-          email,
-          roles,
-          firstname,
-          lastname,
-          phone,
-          isActive,
-          avatar,
-          createdAt,
-          updatedAt
-        }
-      }
-  	}
-}
-  """;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +52,7 @@ class _LandingState extends State<Landing> {
                           height: ConstantSize.landingButtonHeight,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () {
-                            Navigator.of(context).push(landingSignInRoute());
+                            Navigator.of(context).push(landingSignInRoute(widget.client));
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
@@ -116,7 +98,7 @@ class _LandingState extends State<Landing> {
                             )
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(landingSignUpRoute());
+                          Navigator.of(context).push(landingSignUpRoute(widget.client));
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,

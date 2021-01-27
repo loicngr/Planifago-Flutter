@@ -1,9 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:planifago/src/views/utils/utils.dart';
 import 'package:planifago/src/views/utils/constants.dart';
 
 class SignUp extends StatefulWidget {
+  final ValueNotifier<GraphQLClient> client;
+  const SignUp({Key key, this.client}) : super(key: key);
+
   @override
   _SignUpState createState() => _SignUpState();
 }

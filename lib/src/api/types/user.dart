@@ -21,32 +21,22 @@
 }
  */
 
-class Users {
-  final List<User> user;
-
-  Users(this.user);
-
-  factory Users.fromJson(Map<String, dynamic> json) {
-    return Users(json['user']);
-  }
-}
-
 class User {
-  final int id;
-  final int planId;
-  final String email;
-  final Object roles;
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final bool isActive;
-  final String avatar;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  String id;
+  Object plan;
+  String email;
+  Object roles;
+  String firstName;
+  String lastName;
+  String phone;
+  bool isActive;
+  String avatar;
+  String createdAt;
+  String updatedAt;
 
   User({
     this.id,
-    this.planId,
+    this.plan,
     this.email,
     this.roles,
     this.firstName,
@@ -61,7 +51,7 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      planId: json['planId'],
+      plan: json['plan'],
       email: json['email'],
       roles: json['roles'],
       firstName: json['firstName'],

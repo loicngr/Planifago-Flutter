@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:planifago/src/views/utils/constants.dart';
 
 class DrawCircle extends CustomPainter {
@@ -69,7 +72,7 @@ double landingLogoBlocHeight(BuildContext c) => deviceHeight(c) / 2;
 double landingLogoBlocBtn(BuildContext c) => landingLogoBlocHeight(c) / 2;
 
 
-getLoader() {
+get getLoader {
   return Center(
     child: Container(
       width: 50,
@@ -77,4 +80,34 @@ getLoader() {
       child: CircularProgressIndicator(),
     ),
   );
+}
+
+class StorageUtils {
+  static final _storage = new FlutterSecureStorage();
+
+  static Future<Map<dynamic, dynamic>> get userJWT async {
+    var user = await _storage.read(key: "userJWT");
+    if (user == null) return null;
+    return jsonDecode(user);
+  }
+
+  static Future<bool> save(String key, String value) async {
+    try {
+      await _storage.write(key: key, value: value);
+    } catch(e) {
+      print(e);
+      return false;
+    }
+    return true;
+  }
+
+  static Future<bool> delete(String key) async {
+    try {
+      await _storage.delete(key: key);
+    } catch(e) {
+      print(e);
+      return false;
+    }
+    return true;
+  }
 }
