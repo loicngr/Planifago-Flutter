@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:planifago/src/views/utils/constants.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:planifago/utils/constants.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class DrawCircle extends CustomPainter {
   Paint _paint;
@@ -80,6 +82,42 @@ get getLoader {
       child: CircularProgressIndicator(),
     ),
   );
+}
+
+class RouterUtils {
+  static resetRoute(BuildContext c, route) {
+    return Navigator.of(c).pushAndRemoveUntil(route, (route) => false);
+  }
+}
+
+class JwtUtils {
+  static Map<String, dynamic> decode(token) {
+    return JwtDecoder.decode(token);
+  }
+}
+
+class ConfigUtils {
+  static final HttpLink httpLink = HttpLink(
+    uri: ConstantApi.dev_api_address + '/api/graphql',
+  );
+
+  static  String _token;
+  static final AuthLink authLink = AuthLink(getToken: () => _token);
+
+  static final Link link = authLink.concat(httpLink);
+
+  String token;
+  static  ValueNotifier<GraphQLClient> initializeClient(String token) {
+    _token = token;
+    ValueNotifier<GraphQLClient> client =
+    ValueNotifier(
+      GraphQLClient(
+        cache: OptimisticCache(dataIdFromObject:typenameDataIdFromObject),
+        link: link,
+      ),
+    );
+    return client;
+  }
 }
 
 class StorageUtils {

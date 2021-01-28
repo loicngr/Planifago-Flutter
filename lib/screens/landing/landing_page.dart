@@ -1,21 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:planifago/src/api/auth.dart';
-import 'package:planifago/src/views/utils/utils.dart';
-import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
 
-class Landing extends StatefulWidget {
-  final ValueNotifier<GraphQLClient> client;
+/**
+ * Utils
+ */
+import 'package:planifago/utils/utils.dart';
+import 'package:planifago/utils/constants.dart';
 
-  const Landing({Key key, this.client}) : super(key: key);
+/**
+ * Router
+ */
+import 'package:planifago/router.dart';
 
+class LandingPage extends StatefulWidget {
   @override
-  _LandingState createState() => _LandingState();
+  _LandingPageState createState() => _LandingPageState();
 }
 
-class _LandingState extends State<Landing> {
+class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +54,7 @@ class _LandingState extends State<Landing> {
                           height: ConstantSize.landingButtonHeight,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () {
-                            Navigator.of(context).push(landingSignInRoute(widget.client));
+                            Navigator.of(context).push(landingSignInRoute());
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
@@ -65,8 +67,7 @@ class _LandingState extends State<Landing> {
                           text: TextSpan(
                             text: 'Forgot password',
                             style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.dark_gray)),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.of(context).push(landingForgotPasswordRoute()),
+                            recognizer: TapGestureRecognizer()..onTap = () { return null; },
                           ),
                         ),
                       ),
@@ -98,7 +99,10 @@ class _LandingState extends State<Landing> {
                             )
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(landingSignUpRoute(widget.client));
+                          /*
+                            TODO
+                              - Navigator.of(context).push(landingSignUpRoute());
+                           */
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,

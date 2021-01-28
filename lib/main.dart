@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:planifago/src/app.dart';
-import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/globals.dart' as globals;
+import 'package:planifago/client_provider.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+/**
+ * Utils
+ */
+import 'package:planifago/utils/constants.dart';
 
-  final HttpLink httpLink = HttpLink(
-    uri: ConstantApi.dev_api_address + '/api/graphql',
-  );
+/**
+ * Screens
+ */
+import 'package:planifago/screens/home/home_page.dart';
+import 'package:planifago/screens/landing/landing_page.dart';
 
-  final AuthLink authLink = AuthLink(
-    getToken: () => 'Bearer ' + globals.userTokens['token'],
-  );
+final graphqlEndpoint = ConstantApi.dev_api_address + '/api/graphql';
+final subscriptionEndpoint = null;
 
-  final Link link = authLink.concat(httpLink);
+void main() => runApp(MyApp());
 
-  ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      cache: InMemoryCache(),
-      link: httpLink,
-    ),
-  );
-
-  runApp(App(client: client));
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ClientProvider(
+      uri: graphqlEndpoint,
+      subscriptionUri: subscriptionEndpoint,
+      child: MaterialApp(
+        title: 'Planifago',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: LandingPage(),
+      ),
+    );
+  }
 }

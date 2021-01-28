@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:planifago/src/views/utils/constants.dart';
+import 'package:planifago/utils/constants.dart';
 
-Future<http.Response> logUser(Map<dynamic, dynamic> data) {
+Future<http.Response> logInUser(Map<dynamic, dynamic> data) {
   final String email = data['email'];
   final String password = data['password'];
 
