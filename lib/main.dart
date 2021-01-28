@@ -1,14 +1,11 @@
+/// Packages
 import 'package:flutter/material.dart';
 import 'package:planifago/client_provider.dart';
 
-/**
- * Utils
- */
+/// Utils
 import 'package:planifago/utils/constants.dart';
 
-/**
- * Screens
- */
+/// Screens
 import 'package:planifago/screens/home/home_page.dart';
 import 'package:planifago/screens/landing/landing_page.dart';
 

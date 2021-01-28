@@ -1,15 +1,12 @@
+/// Packages
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-/**
- * Utils
- */
+/// Utils
 import 'package:planifago/utils/utils.dart';
 import 'package:planifago/utils/constants.dart';
 
-/**
- * Router
- */
+/// Router
 import 'package:planifago/router.dart';
 
 class LandingPage extends StatefulWidget {
@@ -54,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
                           height: ConstantSize.landingButtonHeight,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () {
-                            Navigator.of(context).push(landingSignInRoute());
+                            Navigator.of(context).push(landingLogInRoute());
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
@@ -99,10 +96,7 @@ class _LandingPageState extends State<LandingPage> {
                             )
                         ),
                         onPressed: () {
-                          /*
-                            TODO
-                              - Navigator.of(context).push(landingSignUpRoute());
-                           */
+                          Navigator.of(context).push(landingSignUpRoute());
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,

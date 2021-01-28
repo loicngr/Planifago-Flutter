@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+/// Packages
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:planifago/utils/constants.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
+/// Utils
+import 'package:planifago/utils/constants.dart';
 
 class DrawCircle extends CustomPainter {
   Paint _paint;
@@ -147,5 +150,35 @@ class StorageUtils {
       return false;
     }
     return true;
+  }
+}
+
+class AlertUtils {
+  /// Print alert box with custom title and message
+  static Future<void> showMyDialog(BuildContext c, String title, String message) async {
+    return showDialog<void>(
+      context: c,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

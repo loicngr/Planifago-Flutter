@@ -1,26 +1,3 @@
-/*
-------------- GraphQl request --------------
-{
-    users {
-    	edges {
-        node {
-          id,
-    			plan { id },
-          email,
-          roles,
-          firstname,
-          lastname,
-          phone,
-          isActive,
-          avatar,
-          createdAt,
-          updatedAt
-        }
-      }
-  	}
-}
- */
-
 class User {
   String id;
   Object plan;

@@ -13,28 +13,64 @@ import 'package:planifago/api/auth.dart';
 import 'package:planifago/api/model/users.dart';
 import 'package:planifago/api/types/user.dart';
 import 'package:planifago/api/users/information.dart';
+import 'package:planifago/api/users/signup.dart';
 
 /// Utils / Globals
 import 'package:planifago/globals.dart' as globals;
 import 'package:planifago/utils/constants.dart';
 import 'package:planifago/utils/utils.dart';
 
-class LoginPage extends StatefulWidget {
+/// Router
+import 'package:planifago/router.dart';
+
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
 
   bool isLoading = false;
 
   Map<String, String> formValues = {
+    'firstname': null,
+    'lastname': null,
     'email': null,
     'password': null
   };
 
+  Widget _buildFirstName() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) return "First name cannot be empty";
+        setState(() {
+          formValues['firstname'] = value;
+        });
+        return null;
+      },
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration:
+      buildInputDecoration("First name", 'assets/images/user.png'),
+    );
+  }
+  Widget _buildLastName() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) return "Last name cannot be empty";
+        setState(() {
+          formValues['lastname'] = value;
+        });
+        return null;
+      },
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration:
+      buildInputDecoration("Last name", 'assets/images/user.png'),
+    );
+  }
   Widget _buildEmail() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
@@ -58,9 +94,6 @@ class _LoginPageState extends State<LoginPage> {
       controller: _passwordController,
       validator: (value) {
         if (value.length <= 6) return "Password must be 6 or more characters in length";
-        setState(() {
-          formValues['password'] = value;
-        });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
@@ -68,6 +101,24 @@ class _LoginPageState extends State<LoginPage> {
       buildInputDecoration("Password", 'assets/images/password.png'),
     );
   }
+  Widget _buildConfirmPassword() {
+    return TextFormField(
+      obscureText: true,
+      autocorrect: false,
+      enableSuggestions: false,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty || value.isNotEmpty && value != _passwordController.text) return "Must match the previous entry";
+        setState(() {
+          formValues['password'] = value;
+        });
+        return null;
+      },
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration: buildInputDecoration("Confirm password", 'assets/images/password.png'),
+    );
+  }
+
   Widget _buildSignUpButton(BuildContext context) {
     return Container(
       height: (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
@@ -129,52 +180,15 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var r = await logInUser(formValues);
-
-    if (r.statusCode != 200) {
-      AlertUtils.showMyDialog(context, "Login status", "No account found.");
-      if (globals.debugMode) { print(r.reasonPhrase); }
-
-      formStopLoading();
-
-      return;
-    }
-
-    Map<String, String> tokens = {
-      'token': jsonDecode(r.body)['token'],
-      'refresh_token': jsonDecode(r.body)['refresh_token']
-    };
-
-    var storeStatus = await StorageUtils.save('userJWT', jsonEncode(tokens));
-    if (!storeStatus) {
-      AlertUtils.showMyDialog(context, "Login status", "An error occurred while saving your data in the application.");
-      if (globals.debugMode) { print("Can't save JWT"); }
-
+    final userID = await usersSignUp(formValues, context);
+    if (userID == null) {
+      AlertUtils.showMyDialog(context, "Sign Up status", "Account not created.");
       formStopLoading();
       return;
     }
 
-    globals.userTokens['token'] = tokens['token'];
-    globals.userTokens['refresh_token'] = tokens['refresh_token'];
-
-    var decodedJWT = JwtUtils.decode(globals.userTokens['token']);
-    String uid = decodedJWT['id'];
-
-    /// Get user information (GraphQL)
-    final userInformation = await usersInformation(uid, context);
-    if (userInformation == null) {
-      AlertUtils.showMyDialog(context, "Login status", "We can't get your user data.");
-      formStopLoading();
-      return;
-    }
-
-    globals.userData = User.fromJson(userInformation);
-    formStopLoading();
-    /*
-      TODO
-        - Redirect to home page
-        - save token to GraphQl
-     */
+    Navigator.of(context).pop();
+    Navigator.of(context).push(landingLogInRoute());
   }
 
   @override
@@ -183,52 +197,57 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: true,
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            height: deviceHeight(context),
-            child: (!isLoading)? Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: (deviceHeight(context) / 3),
-                  width: deviceWidth(context),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomPaint(painter: DrawCircle()),
-                    ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: deviceHeight(context),
+            ),
+            child: IntrinsicHeight(
+              child: (!isLoading)? Column(
+                children: <Widget>[
+                  Container(
+                    height: (deviceHeight(context) / 3) + ConstantSize.landingLogoHeight,
+                    width: deviceWidth(context),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomPaint(painter: DrawCircle()),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  height: (deviceHeight(context) / 3),
-                  width: deviceWidth(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              width: ConstantSize.landingButtonWidth,
-                              child: Column(
-                                children: [
-                                  _buildEmail(),
-                                  _buildPassword()
-                                ],
+                  Container(
+                    width: deviceWidth(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: ConstantSize.landingButtonWidth,
+                                child: Column(
+                                  children: [
+                                    _buildFirstName(),
+                                    _buildLastName(),
+                                    _buildEmail(),
+                                    _buildPassword(),
+                                    _buildConfirmPassword(),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                _buildSignUpButton(context)
-              ],
-            ) : Center(
-              child: getLoader,
+                  Expanded(child: _buildSignUpButton(context))
+                ],
+              ) : Center(
+                child: getLoader,
+              ),
             ),
           ),
         ),
