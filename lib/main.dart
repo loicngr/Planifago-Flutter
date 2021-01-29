@@ -1,18 +1,21 @@
 /// Packages
 import 'package:flutter/material.dart';
 import 'package:planifago/client_provider.dart';
+import 'package:planifago/router.dart' as router;
 
 /// Utils
 import 'package:planifago/utils/constants.dart';
-
-/// Screens
-import 'package:planifago/screens/home/home_page.dart';
-import 'package:planifago/screens/landing/landing_page.dart';
 
 final graphqlEndpoint = ConstantApi.dev_api_address + '/api/graphql';
 final subscriptionEndpoint = null;
 
 void main() => runApp(MyApp());
+
+/*
+  TODO
+    - Check if an JWT are already stored
+    - Try to log user with JWT
+ */
 
 class MyApp extends StatelessWidget {
   @override
@@ -25,7 +28,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LandingPage(),
+        initialRoute: '/landing',
+        onGenerateRoute: (page) {
+          return router.routes(page);
+        },
       ),
     );
   }

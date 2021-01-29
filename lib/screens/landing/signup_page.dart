@@ -187,8 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    Navigator.of(context).pop();
-    Navigator.of(context).push(landingLogInRoute());
+    Navigator.popAndPushNamed(context, '/login');
   }
 
   @override

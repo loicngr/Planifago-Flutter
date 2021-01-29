@@ -170,6 +170,9 @@ class _LoginPageState extends State<LoginPage> {
 
     globals.userData = User.fromJson(userInformation);
     formStopLoading();
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false, arguments: {
+      'title': 'Home'
+    });
     /*
       TODO
         - Redirect to home page

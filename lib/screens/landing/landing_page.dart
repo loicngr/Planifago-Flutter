@@ -51,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
                           height: ConstantSize.landingButtonHeight,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () {
-                            Navigator.of(context).push(landingLogInRoute());
+                            Navigator.pushNamed(context, '/login');
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
@@ -96,7 +96,7 @@ class _LandingPageState extends State<LandingPage> {
                             )
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(landingSignUpRoute());
+                          Navigator.pushNamed(context, '/signup');
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,
