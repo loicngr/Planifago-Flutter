@@ -101,7 +101,7 @@ class JwtUtils {
 
 class ConfigUtils {
   static final HttpLink httpLink = HttpLink(
-    uri: ConstantApi.dev_api_address + '/api/graphql',
+    uri: ConstantApi.devApiAddress + '/api/graphql',
   );
 
   static  String _token;

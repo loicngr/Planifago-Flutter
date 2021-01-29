@@ -1,15 +1,21 @@
 /// Packages
 import 'package:flutter/material.dart';
 import 'package:planifago/client_provider.dart';
-import 'package:planifago/router.dart' as router;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 /// Utils
 import 'package:planifago/utils/constants.dart';
 
-final graphqlEndpoint = ConstantApi.dev_api_address + '/api/graphql';
+/// Router
+import 'package:planifago/router.dart' as router;
+
+final graphqlEndpoint = ConstantApi.devApiAddress + '/api/graphql';
 final subscriptionEndpoint = null;
 
-void main() => runApp(MyApp());
+void main() async {
+  await DotEnv.load();
+  runApp(MyApp());
+}
 
 /*
   TODO
