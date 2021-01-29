@@ -1,17 +1,50 @@
+import 'dart:convert';
+
+/// Packages
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:planifago/src/views/utils/utils.dart';
-import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http/http.dart' as http;
 
-class Login extends StatelessWidget {
+/// Views
+
+/// Api
+import 'package:planifago/api/auth.dart';
+import 'package:planifago/api/model/users.dart';
+import 'package:planifago/api/types/user.dart';
+import 'package:planifago/api/users/information.dart';
+
+/// Utils / Globals
+import 'package:planifago/globals.dart' as globals;
+import 'package:planifago/utils/constants.dart';
+import 'package:planifago/utils/utils.dart';
+
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
+
+  bool isLoading = false;
+
+  Map<String, String> formValues = {
+    'email': null,
+    'password': null
+  };
 
   Widget _buildEmail() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      validator: (value) => !isEmail(value) ? "Sorry, we do not recognize this email address" : null,
+      validator: (value) {
+        if (!isEmail(value)) return "Sorry, we do not recognize this email address";
+        setState(() {
+          formValues['email'] = value;
+        });
+        return null;
+      },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration: buildInputDecoration("Email", 'assets/images/email.png'),
     );
@@ -23,8 +56,13 @@ class Login extends StatelessWidget {
       enableSuggestions: false,
       keyboardType: TextInputType.text,
       controller: _passwordController,
-      validator: (value) =>
-      value.length <= 6 ? "Password must be 6 or more characters in length" : null,
+      validator: (value) {
+        if (value.length <= 6) return "Password must be 6 or more characters in length";
+        setState(() {
+          formValues['password'] = value;
+        });
+        return null;
+      },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration:
       buildInputDecoration("Password", 'assets/images/password.png'),
@@ -64,7 +102,7 @@ class Login extends StatelessWidget {
                     style: TextStyle(fontSize: 13.00, color: Color(ConstantColors.blue), fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => {
-                        Navigator.of(context).push(landingRoute())
+                        Navigator.pop(context)
                       },
                   ),
                 ),
@@ -76,11 +114,70 @@ class Login extends StatelessWidget {
     );
   }
 
-  _validateAndSubmit() {
-    if (_formKey.currentState.validate()) {
-      print('validate form');
-      // _formKey.currentState.reset();
+  void formStopLoading() {
+    _passwordController.clear();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  /// Valid form and submit
+  void _validateAndSubmit() async {
+    if (!_formKey.currentState.validate()) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    var r = await logInUser(formValues);
+
+    if (r.statusCode != 200) {
+      AlertUtils.showMyDialog(context, "Login status", "No account found.");
+      if (globals.debugMode) { print(r.reasonPhrase); }
+
+      formStopLoading();
+
+      return;
     }
+
+    Map<String, String> tokens = {
+      'token': jsonDecode(r.body)['token'],
+      'refresh_token': jsonDecode(r.body)['refresh_token']
+    };
+
+    var storeStatus = await StorageUtils.save('userJWT', jsonEncode(tokens));
+    if (!storeStatus) {
+      AlertUtils.showMyDialog(context, "Login status", "An error occurred while saving your data in the application.");
+      if (globals.debugMode) { print("Can't save JWT"); }
+
+      formStopLoading();
+      return;
+    }
+
+    globals.userTokens['token'] = tokens['token'];
+    globals.userTokens['refresh_token'] = tokens['refresh_token'];
+
+    var decodedJWT = JwtUtils.decode(globals.userTokens['token']);
+    String uid = decodedJWT['id'];
+
+    /// Get user information (GraphQL)
+    final userInformation = await usersInformation(uid, context);
+    if (userInformation == null) {
+      AlertUtils.showMyDialog(context, "Login status", "We can't get your user data.");
+      formStopLoading();
+      return;
+    }
+
+    globals.userData = User.fromJson(userInformation);
+    formStopLoading();
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false, arguments: {
+      'title': 'Home'
+    });
+    /*
+      TODO
+        - Redirect to home page
+        - save token to GraphQl
+     */
   }
 
   @override
@@ -91,7 +188,7 @@ class Login extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             height: deviceHeight(context),
-            child: Column(
+            child: (!isLoading)? Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
@@ -133,6 +230,8 @@ class Login extends StatelessWidget {
                 ),
                 _buildSignUpButton(context)
               ],
+            ) : Center(
+              child: getLoader,
             ),
           ),
         ),

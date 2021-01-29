@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class ConstantColors {
   static const blue = 0xff465EFE;
   static const gray = 0xffCBCFD7;
@@ -17,4 +19,11 @@ class ConstantSize {
   static const landingButtonsPaddingHeight = 30.00;
 
   static const landingLoginButtonHeight = 50.00;
+}
+
+class ConstantApi {
+  static final devApiIp = env['API_LOCAL_IP'] ?? '127.0.0.1';
+  static final devApiPort = '8000';
+  static final devApiProto = 'http';
+  static final devApiAddress = devApiProto + '://' + devApiIp + ':' + devApiPort;
 }

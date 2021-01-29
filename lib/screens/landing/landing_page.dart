@@ -1,11 +1,20 @@
+/// Packages
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:planifago/src/views/utils/utils.dart';
-import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
 
-class Landing extends StatelessWidget {
+/// Utils
+import 'package:planifago/utils/utils.dart';
+import 'package:planifago/utils/constants.dart';
 
+/// Router
+import 'package:planifago/router.dart';
+
+class LandingPage extends StatefulWidget {
+  @override
+  _LandingPageState createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +51,7 @@ class Landing extends StatelessWidget {
                           height: ConstantSize.landingButtonHeight,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () {
-                            Navigator.of(context).push(landingSignInRoute());
+                            Navigator.pushNamed(context, '/login');
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
@@ -55,8 +64,7 @@ class Landing extends StatelessWidget {
                           text: TextSpan(
                             text: 'Forgot password',
                             style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.dark_gray)),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.of(context).push(landingSignInRoute()),
+                            recognizer: TapGestureRecognizer()..onTap = () { return null; },
                           ),
                         ),
                       ),
@@ -88,7 +96,7 @@ class Landing extends StatelessWidget {
                             )
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(landingSignUpRoute());
+                          Navigator.pushNamed(context, '/signup');
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,

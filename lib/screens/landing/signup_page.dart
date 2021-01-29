@@ -1,17 +1,56 @@
+import 'dart:convert';
+
+/// Packages
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:planifago/src/views/utils/utils.dart';
-import 'package:planifago/src/views/utils/constants.dart';
-import 'package:planifago/src/views/router.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http/http.dart' as http;
 
-class SignUp extends StatelessWidget {
+/// Views
+
+/// Api
+import 'package:planifago/api/auth.dart';
+import 'package:planifago/api/model/users.dart';
+import 'package:planifago/api/types/user.dart';
+import 'package:planifago/api/users/information.dart';
+import 'package:planifago/api/users/signup.dart';
+
+/// Utils / Globals
+import 'package:planifago/globals.dart' as globals;
+import 'package:planifago/utils/constants.dart';
+import 'package:planifago/utils/utils.dart';
+
+/// Router
+import 'package:planifago/router.dart';
+
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
 
+  bool isLoading = false;
+
+  Map<String, String> formValues = {
+    'firstname': null,
+    'lastname': null,
+    'email': null,
+    'password': null
+  };
+
   Widget _buildFirstName() {
     return TextFormField(
-      validator: (value) =>
-      value.isEmpty ? "First name cannot be empty" : null,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) return "First name cannot be empty";
+        setState(() {
+          formValues['firstname'] = value;
+        });
+        return null;
+      },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration:
       buildInputDecoration("First name", 'assets/images/user.png'),
@@ -19,15 +58,29 @@ class SignUp extends StatelessWidget {
   }
   Widget _buildLastName() {
     return TextFormField(
-          validator: (value) =>
-          value.isEmpty ? "Last name cannot be empty" : null,
-          style: TextStyle(color: Color(ConstantColors.black)),
-          decoration: buildInputDecoration("Last name", 'assets/images/user.png'),
-      );
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) return "Last name cannot be empty";
+        setState(() {
+          formValues['lastname'] = value;
+        });
+        return null;
+      },
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration:
+      buildInputDecoration("Last name", 'assets/images/user.png'),
+    );
   }
   Widget _buildEmail() {
     return TextFormField(
-      validator: (value) => !isEmail(value) ? "Sorry, we do not recognize this email address" : null,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (!isEmail(value)) return "Sorry, we do not recognize this email address";
+        setState(() {
+          formValues['email'] = value;
+        });
+        return null;
+      },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration: buildInputDecoration("Email", 'assets/images/email.png'),
     );
@@ -39,8 +92,10 @@ class SignUp extends StatelessWidget {
       enableSuggestions: false,
       keyboardType: TextInputType.text,
       controller: _passwordController,
-      validator: (value) =>
-      value.length <= 6 ? "Password must be 6 or more characters in length" : null,
+      validator: (value) {
+        if (value.length <= 6) return "Password must be 6 or more characters in length";
+        return null;
+      },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration:
       buildInputDecoration("Password", 'assets/images/password.png'),
@@ -48,21 +103,25 @@ class SignUp extends StatelessWidget {
   }
   Widget _buildConfirmPassword() {
     return TextFormField(
-          obscureText: true,
-          autocorrect: false,
-          enableSuggestions: false,
-          keyboardType: TextInputType.text,
-          validator: (value) => value.isEmpty ||
-              (value.isNotEmpty && value != _passwordController.text)
-              ? "Must match the previous entry"
-              : null,
-          style: TextStyle(color: Color(ConstantColors.black)),
-          decoration: buildInputDecoration("Confirm password", 'assets/images/password.png'),
-        );
+      obscureText: true,
+      autocorrect: false,
+      enableSuggestions: false,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty || value.isNotEmpty && value != _passwordController.text) return "Must match the previous entry";
+        setState(() {
+          formValues['password'] = value;
+        });
+        return null;
+      },
+      style: TextStyle(color: Color(ConstantColors.black)),
+      decoration: buildInputDecoration("Confirm password", 'assets/images/password.png'),
+    );
   }
+
   Widget _buildSignUpButton(BuildContext context) {
     return Container(
-      height: 300,
+      height: (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
       width: deviceWidth(context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +140,7 @@ class SignUp extends StatelessWidget {
                   onPressed: () {
                     _validateAndSubmit();
                   },
-                  child: Text("Sign Up",
+                  child: Text("Log In",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Color(ConstantColors.white), fontWeight: FontWeight.bold, fontSize: 20.00)),
                 ),
@@ -94,7 +153,7 @@ class SignUp extends StatelessWidget {
                     style: TextStyle(fontSize: 13.00, color: Color(ConstantColors.blue), fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => {
-                        Navigator.of(context).push(landingRoute())
+                        Navigator.pop(context)
                       },
                   ),
                 ),
@@ -106,11 +165,29 @@ class SignUp extends StatelessWidget {
     );
   }
 
-  _validateAndSubmit() {
-    if (_formKey.currentState.validate()) {
-      print('validate form');
-      // _formKey.currentState.reset();
+  void formStopLoading() {
+    _passwordController.clear();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  /// Valid form and submit
+  void _validateAndSubmit() async {
+    if (!_formKey.currentState.validate()) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final userID = await usersSignUp(formValues, context);
+    if (userID == null) {
+      AlertUtils.showMyDialog(context, "Sign Up status", "Account not created.");
+      formStopLoading();
+      return;
     }
+
+    Navigator.popAndPushNamed(context, '/login');
   }
 
   @override
@@ -124,7 +201,7 @@ class SignUp extends StatelessWidget {
               minHeight: deviceHeight(context),
             ),
             child: IntrinsicHeight(
-              child: Column(
+              child: (!isLoading)? Column(
                 children: <Widget>[
                   Container(
                     height: (deviceHeight(context) / 3) + ConstantSize.landingLogoHeight,
@@ -167,6 +244,8 @@ class SignUp extends StatelessWidget {
                   ),
                   Expanded(child: _buildSignUpButton(context))
                 ],
+              ) : Center(
+                child: getLoader,
               ),
             ),
           ),
