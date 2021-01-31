@@ -3,14 +3,11 @@ import 'dart:convert';
 /// Packages
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart' as http;
 
 /// Views
 
 /// Api
 import 'package:planifago/api/auth.dart';
-import 'package:planifago/api/model/users.dart';
 import 'package:planifago/api/types/user.dart';
 import 'package:planifago/api/users/information.dart';
 
@@ -30,16 +27,14 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLoading = false;
 
-  Map<String, String> formValues = {
-    'email': null,
-    'password': null
-  };
+  Map<String, String> formValues = {'email': null, 'password': null};
 
   Widget _buildEmail() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
-        if (!isEmail(value)) return "Sorry, we do not recognize this email address";
+        if (!isEmail(value))
+          return "Sorry, we do not recognize this email address";
         setState(() {
           formValues['email'] = value;
         });
@@ -49,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       decoration: buildInputDecoration("Email", 'assets/images/email.png'),
     );
   }
+
   Widget _buildPassword() {
     return TextFormField(
       obscureText: true,
@@ -57,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.text,
       controller: _passwordController,
       validator: (value) {
-        if (value.length <= 6) return "Password must be 6 or more characters in length";
+        if (value.length <= 6)
+          return "Password must be 6 or more characters in length";
         setState(() {
           formValues['password'] = value;
         });
@@ -65,12 +62,14 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration:
-      buildInputDecoration("Password", 'assets/images/password.png'),
+          buildInputDecoration("Password", 'assets/images/password.png'),
     );
   }
+
   Widget _buildSignUpButton(BuildContext context) {
     return Container(
-      height: (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
+      height:
+          (deviceHeight(context) / 3) - ConstantSize.landingLoginButtonHeight,
       width: deviceWidth(context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text("Log In",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Color(ConstantColors.white), fontWeight: FontWeight.bold, fontSize: 20.00)),
+                      style: TextStyle(
+                          color: Color(ConstantColors.white),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.00)),
                 ),
               ),
               Padding(
@@ -99,11 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: RichText(
                   text: TextSpan(
                     text: 'Back',
-                    style: TextStyle(fontSize: 13.00, color: Color(ConstantColors.blue), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 13.00,
+                        color: Color(ConstantColors.blue),
+                        fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () => {
-                        Navigator.pop(context)
-                      },
+                      ..onTap = () => {Navigator.pop(context)},
                   ),
                 ),
               )
@@ -133,7 +136,9 @@ class _LoginPageState extends State<LoginPage> {
 
     if (r.statusCode != 200) {
       AlertUtils.showMyDialog(context, "Login status", "No account found.");
-      if (globals.debugMode) { print(r.reasonPhrase); }
+      if (globals.debugMode) {
+        print(r.reasonPhrase);
+      }
 
       formStopLoading();
 
@@ -147,8 +152,11 @@ class _LoginPageState extends State<LoginPage> {
 
     var storeStatus = await StorageUtils.save('userJWT', jsonEncode(tokens));
     if (!storeStatus) {
-      AlertUtils.showMyDialog(context, "Login status", "An error occurred while saving your data in the application.");
-      if (globals.debugMode) { print("Can't save JWT"); }
+      AlertUtils.showMyDialog(context, "Login status",
+          "An error occurred while saving your data in the application.");
+      if (globals.debugMode) {
+        print("Can't save JWT");
+      }
 
       formStopLoading();
       return;
@@ -163,20 +171,20 @@ class _LoginPageState extends State<LoginPage> {
     /// Get user information (GraphQL)
     final userInformation = await usersInformation(uid, context);
     if (userInformation == null) {
-      AlertUtils.showMyDialog(context, "Login status", "We can't get your user data.");
+      AlertUtils.showMyDialog(
+          context, "Login status", "We can't get your user data.");
       formStopLoading();
       return;
     }
 
     globals.userData = User.fromJson(userInformation);
     formStopLoading();
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false, arguments: {
-      'title': 'Home'
-    });
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+        arguments: {'title': 'Home'});
     /*
       TODO
-        - Redirect to home page
-        - save token to GraphQl
+        - Redirect to home page [OK]
+        - save token to GraphQl [!]
      */
   }
 
@@ -188,51 +196,53 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Container(
             height: deviceHeight(context),
-            child: (!isLoading)? Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: (deviceHeight(context) / 3),
-                  width: deviceWidth(context),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: (!isLoading)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      CustomPaint(painter: DrawCircle()),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: (deviceHeight(context) / 3),
-                  width: deviceWidth(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: Column(
+                      Container(
+                        height: (deviceHeight(context) / 3),
+                        width: deviceWidth(context),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              width: ConstantSize.landingButtonWidth,
-                              child: Column(
-                                children: [
-                                  _buildEmail(),
-                                  _buildPassword()
-                                ],
-                              ),
-                            ),
+                          children: [
+                            CustomPaint(painter: DrawCircle()),
                           ],
                         ),
-                      )
+                      ),
+                      Container(
+                        height: (deviceHeight(context) / 3),
+                        width: deviceWidth(context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    width: ConstantSize.landingButtonWidth,
+                                    child: Column(
+                                      children: [
+                                        _buildEmail(),
+                                        _buildPassword()
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      _buildSignUpButton(context)
                     ],
+                  )
+                : Center(
+                    child: getLoader,
                   ),
-                ),
-                _buildSignUpButton(context)
-              ],
-            ) : Center(
-              child: getLoader,
-            ),
           ),
         ),
       ),
