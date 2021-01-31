@@ -1,6 +1,7 @@
 /// Packages
 import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:planifago/utils/utils.dart';
 
 String uuidFromObject(Object object) {
   if (object is Map<String, Object>) {
@@ -21,7 +22,7 @@ ValueNotifier<GraphQLClient> clientFor({
   @required String uri,
   String subscriptionUri,
 }) {
-  Link link = HttpLink(uri: uri);
+  Link link = UtilsAuthLink().concat(HttpLink(uri: uri));
   if (subscriptionUri != null) {
     final WebSocketLink websocketLink = WebSocketLink(
       url: subscriptionUri,
@@ -48,9 +49,9 @@ class ClientProvider extends StatelessWidget {
     @required String uri,
     String subscriptionUri,
   }) : client = clientFor(
-    uri: uri,
-    subscriptionUri: subscriptionUri,
-  );
+          uri: uri,
+          subscriptionUri: subscriptionUri,
+        );
 
   final Widget child;
   final ValueNotifier<GraphQLClient> client;
