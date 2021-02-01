@@ -8,7 +8,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 /// Utils / Globals
 import 'package:planifago/globals.dart' as globals;
 
-Future<Map<String, dynamic>> usersInformation(String id, BuildContext context) async {
+Future<Map<String, dynamic>> usersInformation(
+    String id, BuildContext context) async {
   final String _query = r'''
   query user ($URI: ID!) {
     user(id: $URI) {
@@ -34,10 +35,13 @@ Future<Map<String, dynamic>> usersInformation(String id, BuildContext context) a
       'URI': "$id",
     },
   );
+
   final QueryResult r = await _client.query(options);
 
   if (r.hasException) {
-    if (globals.debugMode) { print(r.exception.toString()); }
+    if (globals.debugMode) {
+      print(r.exception.toString());
+    }
     return null;
   }
 

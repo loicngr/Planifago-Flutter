@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
@@ -82,6 +83,32 @@ get getLoader {
 class RouterUtils {
   static resetRoute(BuildContext c, route) {
     return Navigator.of(c).pushAndRemoveUntil(route, (route) => false);
+  }
+}
+
+class RequestUtils {
+  /// Launchs a function with these parameters
+  /// context - The app context
+  /// func - The function that will be called
+  /// params - Array of parameters
+  static Future<dynamic> tryCatchRequest(
+      BuildContext context, Function func, List params) async {
+    var r;
+    try {
+      r = await Function.apply(func, params);
+    } on SocketException {
+      AlertUtils.showMyDialog(
+          context, "Login status", "No Internet connection 😑");
+      return null;
+    } on FormatException {
+      AlertUtils.showMyDialog(
+          context, "Login status", "Bad response format 👎");
+      return null;
+    } on Exception {
+      AlertUtils.showMyDialog(context, "Login status", "Unexpected error 😢");
+      return null;
+    }
+    return r;
   }
 }
 

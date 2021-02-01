@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 /// Packages
 import 'package:flutter/gestures.dart';
@@ -132,9 +133,13 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var r = await logInUser(formValues);
+    var r =
+        await RequestUtils.tryCatchRequest(context, logInUser, [formValues]);
 
-    if (r.statusCode != 200) {
+    if (r == null) {
+      formStopLoading();
+      return;
+    } else if (r.statusCode != 200) {
       AlertUtils.showMyDialog(context, "Login status", "No account found.");
       if (globals.debugMode) {
         print(r.reasonPhrase);
