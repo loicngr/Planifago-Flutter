@@ -13,6 +13,8 @@ final graphqlEndpoint = ConstantApi.devApiAddress + '/api/graphql';
 final subscriptionEndpoint = null;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await DotEnv.load();
   runApp(MyApp());
 }
