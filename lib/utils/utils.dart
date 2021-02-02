@@ -1,16 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
 
 /// Packages
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:hive/hive.dart';
+
+/// Api
+import 'package:planifago/api/refreshToken.dart';
 
 /// Utils
 import 'package:planifago/utils/constants.dart';
+import 'package:planifago/globals.dart' as globals;
 
 class DrawCircle extends CustomPainter {
   Paint _paint;
@@ -86,120 +89,167 @@ class RouterUtils {
   }
 }
 
+class UserUtils {
+  static bool isConnected() {
+    return globals.userIsConnected;
+  }
+
+  static Future<void> disconnect(context) async {
+    return await StorageUtils.save('isConnected', 'value', false);
+  }
+}
+
 class RequestUtils {
   /// Launchs a function with these parameters
   /// context - The app context
   /// func - The function that will be called
   /// params - Array of parameters
   static Future<dynamic> tryCatchRequest(
-      BuildContext context, Function func, List params) async {
+      dynamic context, Function func, List params) async {
     var r;
     try {
       r = await Function.apply(func, params);
     } on SocketException {
-      AlertUtils.showMyDialog(
-          context, "Login status", "No Internet connection 😑");
+      if (context) {
+        AlertUtils.showMyDialog(
+            context, "Login status", "No Internet connection 😑");
+      }
       return null;
     } on FormatException {
-      AlertUtils.showMyDialog(
-          context, "Login status", "Bad response format 👎");
+      if (context) {
+        AlertUtils.showMyDialog(
+            context, "Login status", "Bad response format 👎");
+      }
       return null;
     } on Exception {
-      AlertUtils.showMyDialog(context, "Login status", "Unexpected error 😢");
+      if (context) {
+        AlertUtils.showMyDialog(context, "Login status", "Unexpected error 😢");
+      }
       return null;
     }
     return r;
   }
 }
 
-class UtilsAuthLink extends Link {
-  UtilsAuthLink()
-      : super(
-          request: (Operation operation, [NextLink forward]) {
-            StreamController<FetchResult> controller;
-
-            Future<void> onListen() async {
-              try {
-                var tokens = await JwtUtils.getJWT();
-                var token = tokens['token'];
-
-                operation.setContext(<String, Map<String, String>>{
-                  'headers': <String, String>{
-                    'Authorization': '''bearer $token'''
-                  }
-                });
-              } catch (error) {
-                controller.addError(error);
-              }
-
-              await controller.addStream(forward(operation));
-              await controller.close();
-            }
-
-            controller = StreamController<FetchResult>(onListen: onListen);
-
-            return controller.stream;
-          },
-        );
-}
-
 class JwtUtils {
+  static Future<String> get getAccessToken async {
+    String accessToken = '';
+    Map<dynamic, dynamic> userJWT = await StorageUtils.getBox('jwt');
+
+    if (userJWT.isNotEmpty)
+      accessToken = userJWT['token'];
+    else
+      return accessToken;
+
+    Map<String, dynamic> parsedAccessToken = decode(accessToken);
+
+    if (parsedAccessToken['iat'] >= parsedAccessToken['exp']) {
+      // Token was expired
+
+      var r = await RequestUtils.tryCatchRequest(
+          null, refreshToken, [refreshToken]);
+
+      if (r != null && r.statusCode == 200) {
+        Map<String, String> tokens = {
+          'token': jsonDecode(r.body)['token'],
+          'refresh_token': jsonDecode(r.body)['refresh_token']
+        };
+        var storeStatus = await StorageUtils.saveJWT(
+            'jwt', tokens['token'], tokens['refresh_token']);
+        if (!storeStatus) {
+          // TODO - error, logout user ?
+        } else {
+          accessToken = tokens['token'];
+        }
+      } else {
+        // TODO - error, logout user ?
+      }
+    }
+
+    return accessToken;
+  }
+
   static Map<String, dynamic> decode(token) {
     return JwtDecoder.decode(token);
   }
 
-  static Future<Map<dynamic, dynamic>> getJWT() {
+  static Future<Map<dynamic, dynamic>> get getJWT {
     return StorageUtils.userJWT;
   }
 }
 
-class ConfigUtils {
-  static final HttpLink httpLink = HttpLink(
-    uri: ConstantApi.devApiAddress + '/api/graphql',
-  );
-
-  static String _token;
-  static final AuthLink authLink = AuthLink(getToken: () => _token);
-
-  static final Link link = authLink.concat(httpLink);
-
-  String token;
-  static ValueNotifier<GraphQLClient> initializeClient(String token) {
-    _token = token;
-    ValueNotifier<GraphQLClient> client = ValueNotifier(
-      GraphQLClient(
-        cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject),
-        link: link,
-      ),
-    );
-    return client;
-  }
-}
-
 class StorageUtils {
-  static final _storage = new FlutterSecureStorage();
-
   static Future<Map<dynamic, dynamic>> get userJWT async {
-    var user = await _storage.read(key: "userJWT");
+    var box = await Hive.openBox('jwt');
+    var user = box.toMap();
     if (user == null) return null;
-    return jsonDecode(user);
+    return user;
   }
 
-  static Future<bool> save(String key, String value) async {
+  static Future<dynamic> get(String boxName, String key) async {
+    var box = await Hive.openBox(boxName);
+    return box.get(key);
+  }
+
+  static Future<Map<dynamic, dynamic>> getBox(String boxName) async {
+    var box = await Hive.openBox(boxName);
+    return box.toMap();
+  }
+
+  static Future<bool> save(String boxName, String key, dynamic value) async {
+    var box = await Hive.openBox(boxName);
+
     try {
-      await _storage.write(key: key, value: value);
+      await box.put(key, value);
     } catch (e) {
-      print(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  static Future<bool> saves(
+      String boxName, Map<dynamic, dynamic> entries) async {
+    var box = await Hive.openBox(boxName);
+
+    try {
+      await box.putAll(entries);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  static Future<bool> saveJWT(
+      String boxName, String token, String refreshToken) async {
+    var box = await Hive.openBox(boxName);
+
+    try {
+      await box.put('token', token);
+      await box.put('refresh_token', refreshToken);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  static Future<bool> delete(String boxName, String key) async {
+    var box = await Hive.openBox(boxName);
+
+    try {
+      await box.delete(key);
+    } catch (e) {
       return false;
     }
     return true;
   }
 
-  static Future<bool> delete(String key) async {
+  static Future<bool> deleteBox(String boxName) async {
     try {
-      await _storage.delete(key: key);
+      await Hive.deleteBoxFromDisk(boxName);
     } catch (e) {
-      print(e);
       return false;
     }
     return true;

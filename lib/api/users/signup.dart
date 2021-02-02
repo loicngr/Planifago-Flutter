@@ -41,7 +41,7 @@ Future<String> usersSignUp(
 
   final _client = GraphQLProvider.of(context).value;
   final QueryOptions options = QueryOptions(
-    documentNode: gql(_query),
+    document: gql(_query),
     variables: <String, String>{
       'email': "$email",
       'password': "$password",

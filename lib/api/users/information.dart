@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 /// Packages
 import 'package:flutter/cupertino.dart';
@@ -30,13 +31,25 @@ Future<Map<String, dynamic>> usersInformation(
 
   final _client = GraphQLProvider.of(context).value;
   final QueryOptions options = QueryOptions(
-    documentNode: gql(_query),
+    document: gql(_query),
     variables: <String, String>{
       'URI': "$id",
     },
   );
 
-  final QueryResult r = await _client.query(options);
+  QueryResult r;
+  try {
+    r = await _client.query(options);
+  } on SocketException catch (e) {
+    if (globals.debugMode) print(e);
+    return null;
+  } on FormatException catch (e) {
+    if (globals.debugMode) print(e);
+    return null;
+  } on Exception catch (e) {
+    if (globals.debugMode) print(e);
+    return null;
+  }
 
   if (r.hasException) {
     if (globals.debugMode) {

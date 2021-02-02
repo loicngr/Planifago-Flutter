@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 /// Packages
 import 'package:flutter/gestures.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 
 /// Api
 import 'package:planifago/api/auth.dart';
-import 'package:planifago/api/types/user.dart';
 import 'package:planifago/api/users/information.dart';
 
 /// Utils / Globals
@@ -136,17 +134,18 @@ class _LoginPageState extends State<LoginPage> {
     var r =
         await RequestUtils.tryCatchRequest(context, logInUser, [formValues]);
 
-    if (r == null) {
-      formStopLoading();
-      return;
-    } else if (r.statusCode != 200) {
-      AlertUtils.showMyDialog(context, "Login status", "No account found.");
-      if (globals.debugMode) {
-        print(r.reasonPhrase);
+    if (r == null || r.statusCode != 200) {
+      if (r != null) {
+        AlertUtils.showMyDialog(context, "Login status", "No account found.");
+        if (globals.debugMode) {
+          print(r.reasonPhrase);
+        }
+      } else {
+        AlertUtils.showMyDialog(
+            context, "Login status", "An error has occurred.");
       }
 
       formStopLoading();
-
       return;
     }
 
@@ -155,7 +154,9 @@ class _LoginPageState extends State<LoginPage> {
       'refresh_token': jsonDecode(r.body)['refresh_token']
     };
 
-    var storeStatus = await StorageUtils.save('userJWT', jsonEncode(tokens));
+    /// Save JWT (accessToken / refreshToken) in app storage
+    var storeStatus = await StorageUtils.saveJWT(
+        'jwt', tokens['token'], tokens['refresh_token']);
     if (!storeStatus) {
       AlertUtils.showMyDialog(context, "Login status",
           "An error occurred while saving your data in the application.");
@@ -167,11 +168,16 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    globals.userTokens['token'] = tokens['token'];
-    globals.userTokens['refresh_token'] = tokens['refresh_token'];
+    /// Decode JWT
+    var decodedJWT = JwtUtils.decode(tokens['token']);
+    if (!decodedJWT.containsKey('id')) {
+      AlertUtils.showMyDialog(
+          context, "Login status", "Error when parsing access token.");
+      formStopLoading();
+      return;
+    }
 
-    var decodedJWT = JwtUtils.decode(globals.userTokens['token']);
-    String uid = decodedJWT['id'];
+    String uid = decodedJWT['id']; // = /api/users/{id}
 
     /// Get user information (GraphQL)
     final userInformation = await usersInformation(uid, context);
@@ -182,15 +188,11 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    globals.userData = User.fromJson(userInformation);
+    /// Save user to app storage
+    StorageUtils.saves('user', userInformation);
     formStopLoading();
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
         arguments: {'title': 'Home'});
-    /*
-      TODO
-        - Redirect to home page [OK]
-        - save token to GraphQl [!]
-     */
   }
 
   @override

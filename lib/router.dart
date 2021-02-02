@@ -9,18 +9,26 @@ import 'package:planifago/screens/landing/landing_page.dart';
 import 'package:planifago/screens/landing/login_page.dart';
 import 'package:planifago/screens/landing/signup_page.dart';
 
+/// Utils - Globals
+import 'package:planifago/globals.dart' as globals;
+
 String isEmptyTitle(Map<String, dynamic> params, String name) {
   return (params != null && params.containsKey('title'))
       ? params['title']
       : name;
 }
 
-PageRouteBuilder<dynamic> routes(RouteSettings page) {
+bool isUserConnected() {
+  return globals.userIsConnected;
+}
+
+PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
   Map<String, dynamic> params = {};
   if (page.arguments.toString().isNotEmpty) {
     params = page.arguments as Map<String, dynamic>;
   }
 
+  // TODO - Check if user need to be connected
   switch (page.name) {
     case '/home':
       {
