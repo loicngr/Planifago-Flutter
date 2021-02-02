@@ -8,7 +8,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 /// Utils / Globals
 import 'package:planifago/globals.dart' as globals;
 
-Future<String> usersSignUp(Map<String, String> values, BuildContext context) async {
+Future<String> usersSignUp(
+    Map<String, String> values, BuildContext context) async {
   final DateTime date = DateTime.now();
   final String dateStr = date.toString();
 
@@ -40,7 +41,7 @@ Future<String> usersSignUp(Map<String, String> values, BuildContext context) asy
 
   final _client = GraphQLProvider.of(context).value;
   final QueryOptions options = QueryOptions(
-    documentNode: gql(_query),
+    document: gql(_query),
     variables: <String, String>{
       'email': "$email",
       'password': "$password",
@@ -52,7 +53,9 @@ Future<String> usersSignUp(Map<String, String> values, BuildContext context) asy
   final QueryResult r = await _client.query(options);
 
   if (r.hasException) {
-    if (globals.debugMode) { print(r.exception.toString()); }
+    if (globals.debugMode) {
+      print(r.exception.toString());
+    }
     return null;
   }
 

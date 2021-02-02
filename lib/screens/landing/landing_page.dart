@@ -7,7 +7,6 @@ import 'package:planifago/utils/utils.dart';
 import 'package:planifago/utils/constants.dart';
 
 /// Router
-import 'package:planifago/router.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -17,6 +16,10 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
+    /// If user is connected to app
+    /// Redirect to Home page and defined Home page as root
+    // redirectIfNotConnected(context);
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -27,9 +30,7 @@ class _LandingPageState extends State<LandingPage> {
               width: deviceWidth(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomPaint(painter: DrawCircle())
-                ],
+                children: [CustomPaint(painter: DrawCircle())],
               ),
             ),
             Container(
@@ -55,7 +56,10 @@ class _LandingPageState extends State<LandingPage> {
                           },
                           child: Text("Log In",
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Color(ConstantColors.white), fontWeight: FontWeight.bold, fontSize: 20.00)),
+                              style: TextStyle(
+                                  color: Color(ConstantColors.white),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.00)),
                         ),
                       ),
                       Padding(
@@ -63,8 +67,13 @@ class _LandingPageState extends State<LandingPage> {
                         child: RichText(
                           text: TextSpan(
                             text: 'Forgot password',
-                            style: TextStyle(fontSize: 10.00, color: Color(ConstantColors.dark_gray)),
-                            recognizer: TapGestureRecognizer()..onTap = () { return null; },
+                            style: TextStyle(
+                                fontSize: 10.00,
+                                color: Color(ConstantColors.dark_gray)),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                return null;
+                              },
                           ),
                         ),
                       ),
@@ -92,15 +101,16 @@ class _LandingPageState extends State<LandingPage> {
                             borderRadius: BorderRadius.circular(10.0),
                             side: BorderSide(
                                 color: Color(ConstantColors.blue),
-                                width: 1.00
-                            )
-                        ),
+                                width: 1.00)),
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
                         child: Text("Sign Up",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Color(ConstantColors.blue), fontWeight: FontWeight.bold, fontSize: 20.00)),
+                            style: TextStyle(
+                                color: Color(ConstantColors.blue),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.00)),
                       ),
                     ),
                   ),
