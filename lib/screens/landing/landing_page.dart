@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 /// Utils
 import 'package:planifago/utils/utils.dart';
 import 'package:planifago/utils/constants.dart';
-import 'package:planifago/globals.dart' as globals;
 
 /// Router
 
@@ -15,13 +14,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  static void redirectIfNotConnected(BuildContext context) {
-    if (UserUtils.isConnected()) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-          arguments: {'title': 'Home'});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     /// If user is connected to app

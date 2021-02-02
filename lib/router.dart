@@ -11,6 +11,7 @@ import 'package:planifago/screens/landing/signup_page.dart';
 
 /// Utils - Globals
 import 'package:planifago/globals.dart' as globals;
+import 'package:planifago/screens/wrapper.dart';
 
 String isEmptyTitle(Map<String, dynamic> params, String name) {
   return (params != null && params.containsKey('title'))
@@ -98,8 +99,7 @@ PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
     default:
       {
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              LandingPage(),
+          pageBuilder: (context, animation, secondaryAnimation) => Wrapper(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = Offset(-1, 0);
             var end = Offset.zero;

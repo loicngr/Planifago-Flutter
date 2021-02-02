@@ -84,8 +84,8 @@ get getLoader {
 }
 
 class RouterUtils {
-  static resetRoute(BuildContext c, route) {
-    return Navigator.of(c).pushAndRemoveUntil(route, (route) => false);
+  static resetRoute(BuildContext c, String newRouteName) {
+    Navigator.of(c).pushNamedAndRemoveUntil(newRouteName, (route) => false);
   }
 }
 
@@ -94,8 +94,20 @@ class UserUtils {
     return globals.userIsConnected;
   }
 
-  static Future<void> disconnect(context) async {
-    return await StorageUtils.save('isConnected', 'value', false);
+  static Future<bool> isConnectedAsync() async {
+    final String accessToken = await JwtUtils.getAccessToken;
+    return (accessToken.length > 28) ? true : false;
+  }
+
+  static Future<bool> disconnectAsync(context) async {
+    await StorageUtils.deleteBox('jwt');
+    await StorageUtils.deleteBox('user');
+    globals.userIsConnected = false;
+    return true;
+  }
+
+  static void disconnect(context) {
+    globals.userIsConnected = false;
   }
 }
 

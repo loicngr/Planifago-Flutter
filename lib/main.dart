@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/landing',
+        initialRoute: '/',
         onGenerateRoute: (page) {
           return router.routes(context, page);
         },
