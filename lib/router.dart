@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 
 /// Screens
 import 'package:planifago/screens/home/home_page.dart';
-import 'package:planifago/screens/landing/landing_page.dart';
 import 'package:planifago/screens/landing/login_page.dart';
 import 'package:planifago/screens/landing/signup_page.dart';
 
 /// Utils - Globals
-import 'package:planifago/globals.dart' as globals;
 import 'package:planifago/screens/wrapper.dart';
 
 String isEmptyTitle(Map<String, dynamic> params, String name) {
@@ -19,17 +17,12 @@ String isEmptyTitle(Map<String, dynamic> params, String name) {
       : name;
 }
 
-bool isUserConnected() {
-  return globals.userIsConnected;
-}
-
 PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
   Map<String, dynamic> params = {};
   if (page.arguments.toString().isNotEmpty) {
     params = page.arguments as Map<String, dynamic>;
   }
 
-  // TODO - Check if user need to be connected
   switch (page.name) {
     case '/home':
       {
