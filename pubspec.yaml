@@ -1,0 +1,28 @@
+name: planifago
+description: Planifago application
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  http: ^0.12.2
+  graphql_flutter: ^4.0.0-beta
+  jwt_decoder: ^1.0.4
+  hive: ^1.4.4+1  
+  flutter_dotenv: ^3.1.0
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - .env
