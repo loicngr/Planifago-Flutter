@@ -1,16 +1,15 @@
 library planifago.router;
 
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Screens
 import 'package:planifago/screens/home/home_page.dart';
-import 'package:planifago/screens/landing/landing_page.dart';
 import 'package:planifago/screens/landing/login_page.dart';
 import 'package:planifago/screens/landing/signup_page.dart';
 
 /// Utils - Globals
-import 'package:planifago/globals.dart' as globals;
 import 'package:planifago/screens/wrapper.dart';
 
 String isEmptyTitle(Map<String, dynamic> params, String name) {
@@ -19,23 +18,18 @@ String isEmptyTitle(Map<String, dynamic> params, String name) {
       : name;
 }
 
-bool isUserConnected() {
-  return globals.userIsConnected;
-}
-
 PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
   Map<String, dynamic> params = {};
   if (page.arguments.toString().isNotEmpty) {
     params = page.arguments as Map<String, dynamic>;
   }
 
-  // TODO - Check if user need to be connected
   switch (page.name) {
     case '/home':
       {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => HomePage(
-            title: isEmptyTitle(params, 'Home'),
+            title: isEmptyTitle(params, AppLocalizations.of(context).home),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = Offset(-1, 0);

@@ -1,0 +1,316 @@
+{
+	"login": "Log In",
+	"@login": {
+		"type": "text"
+	},
+	"signup": "Sign Up",
+	"@signup": {
+		"type": "text"
+	},
+	"logout": "Log Out",
+	"@logout": {
+		"type": "text"
+	},
+	"home": "Home",
+	"@home": {
+		"type": "text"
+	},
+	"forgot_password": "Forgot password",
+	"@forgot_password": {
+		"type": "text"
+	},
+	"back": "Back",
+	"@back": {
+		"type": "text"
+	},
+	"email": "Email",
+	"@email": {
+		"type": "text"
+	},
+	"password": "Password",
+	"@password": {
+		"type": "text"
+	},
+	"confirm_password": "Confirm password",
+	"@confirm_password": {
+		"type": "text"
+	},
+	"firstname": "First name",
+	"@firstname": {
+		"type": "text"
+	},
+	"lastname": "Last name",
+	"@lastname": {
+		"type": "text"
+	},
+	"error": "Error",
+	"@error": {
+		"type": "text"
+	},
+	"form_error_email_malformed": "Sorry, we do not recognize this email address.",
+	"@form_error_email_malformed": {
+		"type": "text"
+	},
+	"form_error_password_malformed": "Password must be 6 or more characters in length.",
+	"@form_error_password_malformed": {
+		"type": "text"
+	},
+	"login_status": "Login status",
+	"@login_status": {
+		"type": "text"
+	},
+	"account_not_found": "Account not found.",
+	"@account_not_found": {
+		"type": "text"
+	},
+	"error_occurred": "An error has occurred.",
+	"@error_occurred": {
+		"type": "text"
+	},
+	"error_occurred_saving": "An error occurred while saving your data in the application.",
+	"@error_occurred_saving": {
+		"type": "text"
+	},
+	"error_occurred_parsing": "Error when parsing access token.",
+	"@error_occurred_parsing": {
+		"type": "text"
+	},
+	"error_cannot_get_your_information": "Cannot retrieve your information",
+	"@error_cannot_get_your_information": {
+		"type": "text"
+	},
+	"signup_status": "Sign Up status",
+	"@signup_status": {
+		"type": "text"
+	},
+	"account_not_created": "Account not created.",
+	"@account_not_created": {
+		"type": "text"
+	},
+	"must_match_previous_entry": "Must match the previous entry",
+	"@must_match_previous_entry": {
+		"type": "text"
+	},
+	"firstname_cannot_be_empty": "First name cannot be empty",
+	"@firstname_cannot_be_empty": {
+		"type": "text"
+	},
+	"lastname_cannot_be_empty": "Last name cannot be empty",
+	"@lastname_cannot_be_empty": {
+		"type": "text"
+	},
+	"user": "User",
+	"@user": {
+		"type": "text"
+	},
+	"users": "Users",
+	"@users": {
+		"type": "text"
+	},
+	"event": "Event",
+	"@event": {
+		"type": "text"
+	},
+	"events": "Events",
+	"@events": {
+		"type": "text"
+	},
+	"create_event": "Create Event",
+	"@create_event": {
+		"type": "text"
+	},
+	"address": "Address",
+	"@address": {
+		"type": "text"
+	},
+	"additional_address": "Additional address",
+	"@additional_address": {
+		"type": "text"
+	},
+	"date_start": "Start date",
+	"@date_start": {
+		"type": "text"
+	},
+	"date_end": "End date",
+	"@date_end": {
+		"type": "text"
+	},
+	"is_public_event": "Public event?",
+	"@is_public_event": {
+		"type": "text"
+	},
+	"update": "Update",
+	"@update": {
+		"type": "text"
+	},
+	"send": "Send",
+	"@send": {
+		"type": "text"
+	},
+	"public_events": "Public Events",
+	"@public_events": {
+		"type": "text"
+	},
+	"delete": "Delete",
+	"@delete": {
+		"type": "text"
+	},
+	"search": "Search",
+	"@search": {
+		"type": "text"
+	},
+	"loading": "Loading",
+	"@loading": {
+		"type": "text"
+	},
+	"results": "Results",
+	"@results": {
+		"type": "text"
+	},
+	"result": "Result",
+	"@result": {
+		"type": "text"
+	},
+	"clear": "Clear",
+	"@clear": {
+		"type": "text"
+	},
+	"my_events": "My Events",
+	"@my_events": {
+		"type": "text"
+	},
+	"guests": "Guests",
+	"@guests": {
+		"type": "text"
+	},
+	"current_plan": "Current plan",
+	"@current_plan": {
+		"type": "text"
+	},
+	"event_started_at": "Event started at",
+	"@event_started_at": {
+		"type": "text"
+	},
+	"event_ends_at": "Event ends at",
+	"@event_ends_at": {
+		"type": "text"
+	},
+	"upgrade": "Upgrade",
+	"@upgrade": {
+		"type": "text"
+	},
+	"upgrade_plan": "Upgrade plan",
+	"@upgrade_plan": {
+		"type": "text"
+	},
+	"requests": "Requests",
+	"@requests": {
+		"type": "text"
+	},
+	"guest_requests": "Guest requests",
+	"@guest_requests": {
+		"type": "text"
+	},
+	"success": "Success",
+	"@success": {
+		"type": "text"
+	},
+	"close": "Close",
+	"@close": {
+		"type": "text"
+	},
+	"edit": "Edit",
+	"@edit": {
+		"type": "text"
+	},
+	"pay": "Pay",
+	"@pay": {
+		"type": "text"
+	},
+	"help": "Help",
+	"@help": {
+		"type": "text"
+	},
+	"settings": "Settings",
+	"@settings": {
+		"type": "text"
+	},
+	"recently_added": "Recently added",
+	"@recently_added": {
+		"type": "text"
+	},
+	"news": "News",
+	"@news": {
+		"type": "text"
+	},
+	"sort_by": "Sort by",
+	"@sort_by": {
+		"type": "text"
+	},
+	"most_recent": "Most recent",
+	"@most_recent": {
+		"type": "text"
+	},
+	"rename": "Rename",
+	"@rename": {
+		"type": "text"
+	},
+	"more": "More",
+	"@more": {
+		"type": "text"
+	},
+	"language": "Language",
+	"@language": {
+		"type": "text"
+	},
+	"preferences": "Preferences",
+	"@preferences": {
+		"type": "text"
+	},
+	"dark": "Dark",
+	"@dark": {
+		"type": "text"
+	},
+	"light": "Light",
+	"@light": {
+		"type": "text"
+	},
+	"permissions": "Permissions",
+	"@permissions": {
+		"type": "text"
+	},
+	"general": "General",
+	"@general": {
+		"type": "text"
+	},
+	"hide": "Hide",
+	"@hide": {
+		"type": "text"
+	},
+	"notifications": "Notifications",
+	"@notifications": {
+		"type": "text"
+	},
+	"theme": "Theme",
+	"@theme": {
+		"type": "text"
+	},
+	"save": "Save",
+	"@save": {
+		"type": "text"
+	},
+	"filter": "Filter",
+	"@filter": {
+		"type": "text"
+	},
+	"tutorials": "Tutorials",
+	"@tutorials": {
+		"type": "text"
+	},
+	"add": "Add",
+	"@add": {"type": "text"},
+	"status": "Status",
+	"@status": {"type": "text"},
+	"list": "List",
+	"@list": {"type": "text"}
+}

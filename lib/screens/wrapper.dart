@@ -1,4 +1,5 @@
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:planifago/screens/home/home_page.dart';
 import 'package:planifago/screens/landing/landing_page.dart';
@@ -19,7 +20,7 @@ class Wrapper extends StatelessWidget {
         ) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data) {
-              return HomePage(title: 'Home');
+              return HomePage(title: AppLocalizations.of(context).home);
             }
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return getLoader;

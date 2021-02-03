@@ -1,6 +1,10 @@
 import 'dart:async';
 
 /// Packages
+import 'package:flutter_localizations/flutter_localizations.dart';
+// uncomment the line below after codegen
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -28,6 +32,13 @@ void main() async {
     },
   );
 
+  final dynamic appDefaultLanguage =
+      await StorageUtils.get('settings', 'language');
+  final Locale appDefaultLocale = Locale(appDefaultLanguage ?? 'en');
+
+  // TIPS - save language
+  // StorageUtils.save('settings', 'language', 'fr');
+
   /// Check if user was already connected to app
   /// And
   /// AccessToken is valid
@@ -47,23 +58,38 @@ void main() async {
     ),
   );
 
-  runApp(MyApp(client));
+  runApp(Main(client, appDefaultLocale));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp(this.client);
+class Main extends StatelessWidget {
+  Main(this.client, this._locale);
 
   final ValueNotifier<GraphQLClient> client;
+  final Locale _locale;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(Object context) {
     return GraphQLProvider(
       client: client,
       child: MaterialApp(
+        localizationsDelegates: [
+          // uncomment the line below after codegen
+          AppLocalizations.delegate,
+
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('fr', ''),
+        ],
         title: 'Planifago',
+        locale: _locale,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        // home: Text('home'),
         initialRoute: '/',
         onGenerateRoute: (page) {
           return router.routes(context, page);

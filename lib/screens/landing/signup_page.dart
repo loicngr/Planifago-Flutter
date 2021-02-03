@@ -1,4 +1,5 @@
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -35,14 +36,16 @@ class _SignUpPageState extends State<SignUpPage> {
     return TextFormField(
       keyboardType: TextInputType.text,
       validator: (value) {
-        if (value.isEmpty) return "First name cannot be empty";
+        if (value.isEmpty)
+          return AppLocalizations.of(context).firstname_cannot_be_empty;
         setState(() {
           formValues['firstname'] = value;
         });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration: buildInputDecoration("First name", 'assets/images/user.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).firstname, 'assets/images/user.png'),
     );
   }
 
@@ -50,14 +53,16 @@ class _SignUpPageState extends State<SignUpPage> {
     return TextFormField(
       keyboardType: TextInputType.text,
       validator: (value) {
-        if (value.isEmpty) return "Last name cannot be empty";
+        if (value.isEmpty)
+          return AppLocalizations.of(context).lastname_cannot_be_empty;
         setState(() {
           formValues['lastname'] = value;
         });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration: buildInputDecoration("Last name", 'assets/images/user.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).lastname, 'assets/images/user.png'),
     );
   }
 
@@ -66,14 +71,15 @@ class _SignUpPageState extends State<SignUpPage> {
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (!isEmail(value))
-          return "Sorry, we do not recognize this email address";
+          return AppLocalizations.of(context).form_error_email_malformed;
         setState(() {
           formValues['email'] = value;
         });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration: buildInputDecoration("Email", 'assets/images/email.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).email, 'assets/images/email.png'),
     );
   }
 
@@ -86,12 +92,12 @@ class _SignUpPageState extends State<SignUpPage> {
       controller: _passwordController,
       validator: (value) {
         if (value.length <= 6)
-          return "Password must be 6 or more characters in length";
+          return AppLocalizations.of(context).form_error_password_malformed;
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration:
-          buildInputDecoration("Password", 'assets/images/password.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).password, 'assets/images/password.png'),
     );
   }
 
@@ -104,7 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
       validator: (value) {
         if (value.isEmpty ||
             value.isNotEmpty && value != _passwordController.text)
-          return "Must match the previous entry";
+          return AppLocalizations.of(context).must_match_previous_entry;
         setState(() {
           formValues['password'] = value;
         });
@@ -112,7 +118,8 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       style: TextStyle(color: Color(ConstantColors.black)),
       decoration: buildInputDecoration(
-          "Confirm password", 'assets/images/password.png'),
+          AppLocalizations.of(context).confirm_password,
+          'assets/images/password.png'),
     );
   }
 
@@ -138,7 +145,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () {
                     _validateAndSubmit();
                   },
-                  child: Text("Log In",
+                  child: Text(AppLocalizations.of(context).login,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Color(ConstantColors.white),
@@ -150,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 padding: const EdgeInsets.only(top: 16.0),
                 child: RichText(
                   text: TextSpan(
-                    text: 'Back',
+                    text: AppLocalizations.of(context).back,
                     style: TextStyle(
                         fontSize: 13.00,
                         color: Color(ConstantColors.blue),
@@ -185,7 +192,9 @@ class _SignUpPageState extends State<SignUpPage> {
     final userID = await usersSignUp(formValues, context);
     if (userID == null) {
       AlertUtils.showMyDialog(
-          context, "Sign Up status", "Account not created.");
+          context,
+          AppLocalizations.of(context).signup_status,
+          AppLocalizations.of(context).account_not_created);
       formStopLoading();
       return;
     }

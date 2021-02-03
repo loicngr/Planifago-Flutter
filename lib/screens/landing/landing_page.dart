@@ -1,4 +1,5 @@
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +55,7 @@ class _LandingPageState extends State<LandingPage> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/login');
                           },
-                          child: Text("Log In",
+                          child: Text(AppLocalizations.of(context).login,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Color(ConstantColors.white),
@@ -66,7 +67,7 @@ class _LandingPageState extends State<LandingPage> {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: RichText(
                           text: TextSpan(
-                            text: 'Forgot password',
+                            text: AppLocalizations.of(context).forgot_password,
                             style: TextStyle(
                                 fontSize: 10.00,
                                 color: Color(ConstantColors.dark_gray)),
@@ -105,7 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
-                        child: Text("Sign Up",
+                        child: Text(AppLocalizations.of(context).signup,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Color(ConstantColors.blue),

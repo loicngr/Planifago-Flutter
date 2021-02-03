@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'dart:ui';
 
 /// Packages
 import 'package:flutter/cupertino.dart';
@@ -44,7 +45,8 @@ InputDecoration buildInputDecoration(String hint, String iconPath) {
     enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Color(ConstantColors.gray))),
     icon: iconPath != '' ? Image.asset(iconPath) : null,
-    errorStyle: TextStyle(color: Color(ConstantColors.saumon)),
+    errorMaxLines: 5,
+    errorStyle: TextStyle(color: Color(ConstantColors.saumon), fontSize: 14.00),
     errorBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Color(ConstantColors.saumon))),
     focusedErrorBorder: UnderlineInputBorder(
@@ -111,6 +113,10 @@ class UserUtils {
   }
 }
 
+Future<Locale> get getAppDefaultLocale async {
+  return await StorageUtils.get('settings', 'locale');
+}
+
 class RequestUtils {
   /// Launchs a function with these parameters
   /// context - The app context
@@ -168,13 +174,13 @@ class JwtUtils {
         };
         var storeStatus = await StorageUtils.saveJWT(
             'jwt', tokens['token'], tokens['refresh_token']);
-        if (!storeStatus) {
-          // TODO - error, logout user ?
-        } else {
+        if (storeStatus) {
           accessToken = tokens['token'];
+        } else {
+          accessToken = '';
         }
       } else {
-        // TODO - error, logout user ?
+        accessToken = '';
       }
     }
 
@@ -214,6 +220,7 @@ class StorageUtils {
     try {
       await box.put(key, value);
     } catch (e) {
+      if (globals.debugMode) print(e);
       return false;
     }
 
