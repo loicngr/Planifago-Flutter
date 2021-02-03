@@ -1,6 +1,7 @@
 library planifago.router;
 
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Screens
@@ -28,7 +29,7 @@ PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
       {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => HomePage(
-            title: isEmptyTitle(params, 'Home'),
+            title: isEmptyTitle(params, AppLocalizations.of(context).home),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = Offset(-1, 0);

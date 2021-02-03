@@ -6,6 +6,7 @@ Planifago application
  - https://flutter.dev/docs/cookbook
  - https://github.com/zino-app/graphql-flutter
  - https://github.com/zino-app/graphql-flutter/tree/master/packages/graphql
+ - https://flutter.dev/docs/development/accessibility-and-localization/internationalization
  
 ## Configuration Env
  - ``.env`` (at root directory)

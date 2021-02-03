@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 /// Packages
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -33,14 +34,15 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (!isEmail(value))
-          return "Sorry, we do not recognize this email address";
+          return AppLocalizations.of(context).form_error_email_malformed;
         setState(() {
           formValues['email'] = value;
         });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration: buildInputDecoration("Email", 'assets/images/email.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).email, 'assets/images/email.png'),
     );
   }
 
@@ -53,15 +55,15 @@ class _LoginPageState extends State<LoginPage> {
       controller: _passwordController,
       validator: (value) {
         if (value.length <= 6)
-          return "Password must be 6 or more characters in length";
+          return AppLocalizations.of(context).form_error_password_malformed;
         setState(() {
           formValues['password'] = value;
         });
         return null;
       },
       style: TextStyle(color: Color(ConstantColors.black)),
-      decoration:
-          buildInputDecoration("Password", 'assets/images/password.png'),
+      decoration: buildInputDecoration(
+          AppLocalizations.of(context).password, 'assets/images/password.png'),
     );
   }
 
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     _validateAndSubmit();
                   },
-                  child: Text("Log In",
+                  child: Text(AppLocalizations.of(context).login,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Color(ConstantColors.white),
@@ -99,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.only(top: 16.0),
                 child: RichText(
                   text: TextSpan(
-                    text: 'Back',
+                    text: AppLocalizations.of(context).back,
                     style: TextStyle(
                         fontSize: 13.00,
                         color: Color(ConstantColors.blue),
@@ -136,13 +138,18 @@ class _LoginPageState extends State<LoginPage> {
 
     if (r == null || r.statusCode != 200) {
       if (r != null) {
-        AlertUtils.showMyDialog(context, "Login status", "No account found.");
+        AlertUtils.showMyDialog(
+            context,
+            AppLocalizations.of(context).login_status,
+            AppLocalizations.of(context).account_not_found);
         if (globals.debugMode) {
           print(r.reasonPhrase);
         }
       } else {
         AlertUtils.showMyDialog(
-            context, "Login status", "An error has occurred.");
+            context,
+            AppLocalizations.of(context).login_status,
+            AppLocalizations.of(context).error_occurred);
       }
 
       formStopLoading();
@@ -158,8 +165,10 @@ class _LoginPageState extends State<LoginPage> {
     var storeStatus = await StorageUtils.saveJWT(
         'jwt', tokens['token'], tokens['refresh_token']);
     if (!storeStatus) {
-      AlertUtils.showMyDialog(context, "Login status",
-          "An error occurred while saving your data in the application.");
+      AlertUtils.showMyDialog(
+          context,
+          AppLocalizations.of(context).login_status,
+          AppLocalizations.of(context).error_occurred_saving);
       if (globals.debugMode) {
         print("Can't save JWT");
       }
@@ -172,7 +181,9 @@ class _LoginPageState extends State<LoginPage> {
     var decodedJWT = JwtUtils.decode(tokens['token']);
     if (!decodedJWT.containsKey('id')) {
       AlertUtils.showMyDialog(
-          context, "Login status", "Error when parsing access token.");
+          context,
+          AppLocalizations.of(context).login_status,
+          AppLocalizations.of(context).error_occurred_parsing);
       formStopLoading();
       return;
     }
@@ -183,7 +194,9 @@ class _LoginPageState extends State<LoginPage> {
     final userInformation = await usersInformation(uid, context);
     if (userInformation == null) {
       AlertUtils.showMyDialog(
-          context, "Login status", "We can't get your user data.");
+          context,
+          AppLocalizations.of(context).login_status,
+          AppLocalizations.of(context).error_cannot_get_your_information);
       formStopLoading();
       return;
     }
@@ -192,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
     StorageUtils.saves('user', userInformation);
     formStopLoading();
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-        arguments: {'title': 'Home'});
+        arguments: {'title': AppLocalizations.of(context).home});
   }
 
   @override
