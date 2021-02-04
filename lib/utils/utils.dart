@@ -6,8 +6,10 @@ import 'dart:ui';
 /// Packages
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Api
 import 'package:planifago/api/refreshToken.dart';
@@ -52,6 +54,13 @@ InputDecoration buildInputDecoration(String hint, String iconPath) {
     focusedErrorBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Color(ConstantColors.saumon))),
   );
+}
+
+BottomNavigationBarItem buildbottomNavigationBarItem(
+    String label, String iconPath) {
+  return BottomNavigationBarItem(
+      label: label,
+      icon: iconPath != '' ? Image.asset(iconPath) : Icon(Icons.help));
 }
 
 bool isEmail(String value) {
@@ -294,9 +303,45 @@ class AlertUtils {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Close'),
+              child: Text(AppLocalizations.of(context).close),
               onPressed: () {
                 Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Future<void> showMyDialogAndRestart(BuildContext c) async {
+    return showDialog<void>(
+      context: c,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).information),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(AppLocalizations.of(context).app_reboot_required),
+                Text(AppLocalizations.of(context).reboot_now),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context).no),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context).yes),
+              onPressed: () async {
+                print('App reboot');
+                await SystemChannels.platform
+                    .invokeMethod<void>('SystemNavigator.pop', true);
               },
             ),
           ],

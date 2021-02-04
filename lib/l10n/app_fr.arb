@@ -78,5 +78,12 @@
 	"tutorials": "Tutoriels",
 	"add": "Ajouter",
 	"status": "Statut",
-	"list": "Liste"
+	"list": "Liste",
+	"information": "Informations",
+	"app_reboot_required": "Redémarrage de l'application requis",
+	"welcome": "Bienvenue",
+	"ok": "D'accord",
+	"no": "Non",
+	"yes": "Oui",
+	"reboot_now": "Voulez vous redémarrer l'application maintenant ? "
 }

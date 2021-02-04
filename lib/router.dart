@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:planifago/screens/home/home_page.dart';
 import 'package:planifago/screens/landing/login_page.dart';
 import 'package:planifago/screens/landing/signup_page.dart';
+import 'package:planifago/screens/settings/settings_page.dart';
 
 /// Utils - Globals
 import 'package:planifago/screens/wrapper.dart';
@@ -33,6 +34,29 @@ PageRouteBuilder<dynamic> routes(BuildContext context, RouteSettings page) {
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = Offset(-1, 0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        );
+      }
+      break;
+
+    case '/settings':
+      {
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => SettingsPage(
+            title: isEmptyTitle(params, AppLocalizations.of(context).settings),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = Offset(1, 0);
             var end = Offset.zero;
             var curve = Curves.ease;
 

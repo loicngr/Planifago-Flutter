@@ -2,7 +2,9 @@ import 'dart:async';
 
 /// Packages
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 // uncomment the line below after codegen
+/// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
@@ -74,6 +76,7 @@ class Main extends StatelessWidget {
       child: MaterialApp(
         localizationsDelegates: [
           // uncomment the line below after codegen
+          /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
           AppLocalizations.delegate,
 
           GlobalMaterialLocalizations.delegate,
@@ -89,7 +92,7 @@ class Main extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        // home: Text('home'),
+        //home: Text('home'),
         initialRoute: '/',
         onGenerateRoute: (page) {
           return router.routes(context, page);

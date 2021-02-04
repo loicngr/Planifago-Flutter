@@ -308,9 +308,35 @@
 		"type": "text"
 	},
 	"add": "Add",
-	"@add": {"type": "text"},
+	"@add": {
+		"type": "text"
+	},
 	"status": "Status",
-	"@status": {"type": "text"},
+	"@status": {
+		"type": "text"
+	},
 	"list": "List",
-	"@list": {"type": "text"}
+	"@list": {
+		"type": "text"
+	},
+	"information": "Information",
+	"@information": {
+		"type": "text"
+	},
+	"app_reboot_required": "App reboot required",
+	"@app_reboot_required": {
+		"type": "text"
+	},
+	"welcome": "Welcome",
+	"@welcome": {
+		"type": "text"
+	},
+	"ok": "Ok",
+	"@ok": {"type": "text"},
+	"no": "No",
+	"@no": {"type": "text"},
+	"yes": "Yes",
+	"@yes": {"type": "text"},
+	"reboot_now": "Do you want to restart the application now? ",
+	"@reboot_now": {"type": "text"}
 }
