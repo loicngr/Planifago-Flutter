@@ -69,6 +69,15 @@ class Main extends StatelessWidget {
   final ValueNotifier<GraphQLClient> client;
   final Locale _locale;
 
+  get _supportedLocales {
+    List<Locale> locales = [];
+    ConstantLanguage.languages.forEach((element) {
+      locales.add(Locale(element, ''));
+    });
+
+    return locales;
+  }
+
   @override
   Widget build(Object context) {
     return GraphQLProvider(
@@ -83,10 +92,7 @@ class Main extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('en', ''),
-          const Locale('fr', ''),
-        ],
+        supportedLocales: _supportedLocales,
         title: 'Planifago',
         locale: _locale,
         theme: ThemeData(

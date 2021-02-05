@@ -17,3 +17,7 @@ Planifago application
    /// r = null or Future<Response>
    var r = await RequestUtils.tryCatchRequest(appContext, myFunction, [param1, param2]);
    ```
+
+## Add new locale
+   - Update List `ConstantLanguage.languages` in `lib/utils/constants.dart`
+   - Update function `LanguageUtils.getLanguages` in `lib/utils/utils.dart`

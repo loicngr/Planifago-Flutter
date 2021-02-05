@@ -17,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   String languageValue = '';
+  Map<String, String> languages = {};
 
   Widget _buildLogout() {
     return TextButton(
@@ -26,14 +27,17 @@ class _SettingsPageState extends State<SettingsPage> {
               .then((value) => {Navigator.popAndPushNamed(context, '/')})
               .catchError((error) => {print(error)});
         },
-        child: Text(AppLocalizations.of(context).logout));
+        child: Text(AppLocalizations.of(context).logout,
+            style: TextStyle(color: Color(ConstantColors.blue))));
   }
 
   Future<Widget> _buildlanguage() async {
     final appDefaultLanguage = await StorageUtils.get('settings', 'language');
 
+    languages = LanguageUtils.getLanguages(context);
+
     setState(() {
-      languageValue = appDefaultLanguage;
+      languageValue = LanguageUtils.getKeyValue(languages, appDefaultLanguage);
     });
 
     return DropdownButton(
@@ -41,19 +45,20 @@ class _SettingsPageState extends State<SettingsPage> {
       icon: Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
+      style: TextStyle(color: Color(ConstantColors.black)),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: Color(ConstantColors.blue),
       ),
       onChanged: (String newValue) async {
+        String value = LanguageUtils.getValueKey(languages, newValue);
         setState(() {
-          languageValue = newValue;
+          languageValue = value;
         });
-        await StorageUtils.save('settings', 'language', newValue);
+        await StorageUtils.save('settings', 'language', value);
         AlertUtils.showMyDialogAndRestart(context);
       },
-      items: <String>['fr', 'en'].map<DropdownMenuItem<String>>((String value) {
+      items: languages.values.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

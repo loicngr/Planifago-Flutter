@@ -332,11 +332,35 @@
 		"type": "text"
 	},
 	"ok": "Ok",
-	"@ok": {"type": "text"},
+	"@ok": {
+		"type": "text"
+	},
 	"no": "No",
-	"@no": {"type": "text"},
+	"@no": {
+		"type": "text"
+	},
 	"yes": "Yes",
-	"@yes": {"type": "text"},
+	"@yes": {
+		"type": "text"
+	},
 	"reboot_now": "Do you want to restart the application now? ",
-	"@reboot_now": {"type": "text"}
+	"@reboot_now": {
+		"type": "text"
+	},
+	"english": "English",
+	"@english": {"type": "text"},
+	"french": "French",
+	"@french": {"type": "text"},
+	"chinese": "Chinese",
+	"@chinese": {"type": "text"},
+	"japanese": "Japanese",
+	"@japanese": {"type": "text"},
+	"german": "German",
+	"@german": {"type": "text"},
+	"portuguese": "Portuguese",
+	"@portuguese": {"type": "text"},
+	"spanish": "Spanish",
+	"@spanish": {"type": "text"},
+	"italian": "Italian",
+	"@italian": {"type": "text"}
 }
