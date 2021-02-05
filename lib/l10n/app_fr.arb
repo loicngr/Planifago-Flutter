@@ -85,5 +85,13 @@
 	"ok": "D'accord",
 	"no": "Non",
 	"yes": "Oui",
-	"reboot_now": "Voulez vous redémarrer l'application maintenant ? "
+	"reboot_now": "Voulez vous redémarrer l'application maintenant ? ",
+	"english": "Anglais",
+	"french": "Français",
+	"chinese": "Chinois",
+	"japanese": "Japonais",
+	"german": "Allemand",
+	"portuguese": "Portugais",
+	"spanish": "Espagnol",
+	"italian": "Italien"
 }
