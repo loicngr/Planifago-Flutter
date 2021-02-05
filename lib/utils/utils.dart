@@ -339,7 +339,6 @@ class AlertUtils {
             TextButton(
               child: Text(AppLocalizations.of(context).yes),
               onPressed: () async {
-                print('App reboot');
                 await SystemChannels.platform
                     .invokeMethod<void>('SystemNavigator.pop', true);
               },
@@ -348,5 +347,41 @@ class AlertUtils {
         );
       },
     );
+  }
+}
+
+class LanguageUtils {
+  static Map<String, String> getLanguages(BuildContext context) {
+    Map<String, String> languages = {};
+
+    ConstantLanguage.languages.forEach((element) {
+      switch (element) {
+        case 'en':
+          languages['en'] = AppLocalizations.of(context).english;
+          break;
+        case 'fr':
+          languages['fr'] = AppLocalizations.of(context).french;
+          break;
+        default:
+      }
+    });
+
+    return languages;
+  }
+
+  static String getValueAt(Map<String, String> languages, int index) {
+    return languages.values.elementAt(index);
+  }
+
+  static String getKeyAt(Map<String, String> languages, int index) {
+    return languages.keys.elementAt(index);
+  }
+
+  static String getKeyValue(Map<String, String> languages, String key) {
+    return languages.values.elementAt(languages.keys.toList().indexOf(key));
+  }
+
+  static String getValueKey(Map<String, String> languages, String value) {
+    return languages.keys.elementAt(languages.values.toList().indexOf(value));
   }
 }

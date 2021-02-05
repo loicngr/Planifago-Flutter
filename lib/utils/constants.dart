@@ -25,5 +25,10 @@ class ConstantApi {
   static final devApiIp = env['API_LOCAL_IP'] ?? '127.0.0.1';
   static final devApiPort = '8000';
   static final devApiProto = 'http';
-  static final devApiAddress = devApiProto + '://' + devApiIp + ':' + devApiPort;
+  static final devApiAddress =
+      devApiProto + '://' + devApiIp + ':' + devApiPort;
+}
+
+class ConstantLanguage {
+  static final languages = ["en", "fr"];
 }
