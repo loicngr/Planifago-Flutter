@@ -137,19 +137,19 @@ class RequestUtils {
     try {
       r = await Function.apply(func, params);
     } on SocketException {
-      if (context) {
+      if (context != null) {
         AlertUtils.showMyDialog(
             context, "Login status", "No Internet connection 😑");
       }
       return null;
     } on FormatException {
-      if (context) {
+      if (context != null) {
         AlertUtils.showMyDialog(
             context, "Login status", "Bad response format 👎");
       }
       return null;
     } on Exception {
-      if (context) {
+      if (context != null) {
         AlertUtils.showMyDialog(context, "Login status", "Unexpected error 😢");
       }
       return null;
@@ -159,7 +159,7 @@ class RequestUtils {
 }
 
 class JwtUtils {
-  static Future<String> get getAccessToken async {
+  static Future<dynamic> get getAccessToken async {
     String accessToken = '';
     Map<dynamic, dynamic> userJWT = await StorageUtils.getBox('jwt');
 
@@ -169,12 +169,16 @@ class JwtUtils {
       return accessToken;
 
     Map<String, dynamic> parsedAccessToken = decode(accessToken);
+    String userRefreshToken = userJWT['refresh_token'];
 
-    if (parsedAccessToken['iat'] >= parsedAccessToken['exp']) {
+    DateTime expiredDate = DateTime.fromMillisecondsSinceEpoch(
+        parsedAccessToken['exp'] * 1000,
+        isUtc: true);
+    if (expiredDate.compareTo(DateTime.now()) == -1) {
       // Token was expired
 
       var r = await RequestUtils.tryCatchRequest(
-          null, refreshToken, [refreshToken]);
+          null, refreshToken, [userRefreshToken]);
 
       if (r != null && r.statusCode == 200) {
         Map<String, String> tokens = {
