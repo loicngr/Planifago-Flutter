@@ -2,10 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planifago/language.dart';
 import 'package:planifago/utils/constants.dart';
 
 // Utils / Constants
 import 'package:planifago/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key key, this.title}) : super(key: key);
@@ -16,6 +18,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  AppLanguage appLanguage;
   String languageValue = '';
   Map<String, String> languages = {};
 
@@ -32,12 +35,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<Widget> _buildlanguage() async {
-    final appDefaultLanguage = await StorageUtils.get('settings', 'language');
+    await appLanguage.fetchLocale();
 
     languages = LanguageUtils.getLanguages(context);
 
     setState(() {
-      languageValue = LanguageUtils.getKeyValue(languages, appDefaultLanguage);
+      languageValue = LanguageUtils.getKeyValue(
+          languages, appLanguage.appLocal.languageCode);
     });
 
     return DropdownButton(
@@ -55,8 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
         setState(() {
           languageValue = value;
         });
-        await StorageUtils.save('settings', 'language', value);
-        AlertUtils.showMyDialogAndRestart(context);
+        appLanguage.changeLanguage(Locale(value));
       },
       items: languages.values.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -73,6 +76,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    appLanguage = Provider.of<AppLanguage>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title,

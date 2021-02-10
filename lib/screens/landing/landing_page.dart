@@ -73,6 +73,7 @@ class _LandingPageState extends State<LandingPage> {
                                 color: Color(ConstantColors.dark_gray)),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
+                                // TODO - forgot password page
                                 return null;
                               },
                           ),

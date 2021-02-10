@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:planifago/language.dart';
 
 /// Utils
 import 'package:planifago/utils/constants.dart';
@@ -18,12 +19,16 @@ import 'package:planifago/globals.dart' as globals;
 /// Router
 import 'package:planifago/router.dart' as router;
 import 'package:planifago/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 final graphqlEndpoint = ConstantApi.devApiAddress + '/api/graphql';
 
 void main() async {
   await initHiveForFlutter();
   await DotEnv.load();
+
+  AppLanguage appLanguage = AppLanguage();
+  await appLanguage.fetchLocale();
 
   final HttpLink httpLink = HttpLink(graphqlEndpoint);
 
@@ -34,9 +39,9 @@ void main() async {
     },
   );
 
-  final dynamic appDefaultLanguage =
-      await StorageUtils.get('settings', 'language');
-  final Locale appDefaultLocale = Locale(appDefaultLanguage ?? 'en');
+  // final dynamic appDefaultLanguage =
+  //     await StorageUtils.get('settings', 'language');
+  // final Locale appDefaultLocale = Locale(appDefaultLanguage ?? 'en');
 
   // TIPS - save language
   // StorageUtils.save('settings', 'language', 'fr');
@@ -60,14 +65,14 @@ void main() async {
     ),
   );
 
-  runApp(Main(client, appDefaultLocale));
+  runApp(Main(client, appLanguage));
 }
 
 class Main extends StatelessWidget {
-  Main(this.client, this._locale);
+  Main(this.client, this.appLanguage);
 
+  final AppLanguage appLanguage;
   final ValueNotifier<GraphQLClient> client;
-  final Locale _locale;
 
   get _supportedLocales {
     List<Locale> locales = [];
@@ -80,30 +85,35 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(Object context) {
-    return GraphQLProvider(
-      client: client,
-      child: MaterialApp(
-        localizationsDelegates: [
-          // uncomment the line below after codegen
-          /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
-          AppLocalizations.delegate,
+    return ChangeNotifierProvider<AppLanguage>(
+      create: (_) => appLanguage,
+      child: Consumer<AppLanguage>(builder: (context, model, child) {
+        return GraphQLProvider(
+          client: client,
+          child: MaterialApp(
+            localizationsDelegates: [
+              // uncomment the line below after codegen
+              /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
+              AppLocalizations.delegate,
 
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: _supportedLocales,
-        title: 'Planifago',
-        locale: _locale,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        //home: Text('home'),
-        initialRoute: '/',
-        onGenerateRoute: (page) {
-          return router.routes(context, page);
-        },
-      ),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: _supportedLocales,
+            title: 'Planifago',
+            locale: model.appLocal,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            //home: Text('home'),
+            initialRoute: '/',
+            onGenerateRoute: (page) {
+              return router.routes(context, page);
+            },
+          ),
+        );
+      }),
     );
   }
 }
