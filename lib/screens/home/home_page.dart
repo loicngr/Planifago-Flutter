@@ -23,7 +23,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: Color(ConstantColors.white),
+        elevation: 0,
+      ),
       body: Container(
           child: Query(
               options: QueryOptions(
@@ -63,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(15, 50, 0, 0),
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 20),
                       child: Text(
                         AppLocalizations.of(context).public_events,
                         textAlign: TextAlign.left,
