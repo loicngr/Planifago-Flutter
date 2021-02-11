@@ -81,8 +81,10 @@ double deviceWidth(BuildContext c) =>
     devicePadding(c).right;
 double deviceHeight(BuildContext c) => MediaQuery.of(c).size.height;
 
-double landingLogoBlocHeight(BuildContext c) => deviceHeight(c) / 2;
+double landingLogoBlocHeight(BuildContext c) =>
+    (deviceHeight(c) - landingLanguageHeight(c)) / 2;
 double landingLogoBlocBtn(BuildContext c) => landingLogoBlocHeight(c) / 2;
+double landingLanguageHeight(BuildContext c) => devicePadding(c).top + 50;
 
 get getLoader {
   return Center(
