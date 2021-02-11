@@ -100,6 +100,7 @@ class Main extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+            debugShowCheckedModeBanner: false,
             supportedLocales: _supportedLocales,
             title: 'Planifago',
             locale: model.appLocal,
